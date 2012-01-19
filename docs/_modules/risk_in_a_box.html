@@ -1,0 +1,114 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>risk_in_a_box &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>risk_in_a_box</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for risk_in_a_box</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid - **Module risk_in_a_box.**</span>
+
+<span class="sd">This script initializes the plugin, making it known to QGIS.</span>
+
+<span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
+
+<span class="sd">.. note:: This program is free software; you can redistribute it and/or modify</span>
+<span class="sd">     it under the terms of the GNU General Public License as published by</span>
+<span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
+<span class="sd">     (at your option) any later version.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&#39;10/01/2011&#39;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Copyright 2012, Australia Indonesia Facility for &#39;</span>
+                 <span class="s">&#39;Disaster Reduction&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="name"><a class="viewcode-back" href="../init.html#risk_in_a_box.name">[docs]</a><span class="k">def</span> <span class="nf">name</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A user friendly name for the plugin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;Risk in a box&#39;</span>
+
+</div>
+<div class="viewcode-block" id="description"><a class="viewcode-back" href="../init.html#risk_in_a_box.description">[docs]</a><span class="k">def</span> <span class="nf">description</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A one line description for the plugin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;Disaster risk assessment tool developed by AusAid&#39;</span>
+
+</div>
+<div class="viewcode-block" id="version"><a class="viewcode-back" href="../init.html#risk_in_a_box.version">[docs]</a><span class="k">def</span> <span class="nf">version</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Version of the plugin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;Version 0.1&#39;</span>
+
+</div>
+<div class="viewcode-block" id="icon"><a class="viewcode-back" href="../init.html#risk_in_a_box.icon">[docs]</a><span class="k">def</span> <span class="nf">icon</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Icon path for the plugin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;icon.png&#39;</span>
+
+</div>
+<div class="viewcode-block" id="qgisMinimumVersion"><a class="viewcode-back" href="../init.html#risk_in_a_box.qgisMinimumVersion">[docs]</a><span class="k">def</span> <span class="nf">qgisMinimumVersion</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Minimum version of QGIS needed to run this plugin -</span>
+<span class="sd">    currently set to 1.7.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s">&#39;1.7&#39;</span>
+
+</div>
+<div class="viewcode-block" id="classFactory"><a class="viewcode-back" href="../init.html#risk_in_a_box.classFactory">[docs]</a><span class="k">def</span> <span class="nf">classFactory</span><span class="p">(</span><span class="n">iface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load Riab class from file Riab&quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">riab</span> <span class="kn">import</span> <span class="n">Riab</span>
+    <span class="k">return</span> <span class="n">Riab</span><span class="p">(</span><span class="n">iface</span><span class="p">)</span></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>riabdialog &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>riabdialog</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for riabdialog</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid - **GUI Dialog.**</span>
+
+<span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
+
+<span class="sd">.. note:: This program is free software; you can redistribute it and/or modify</span>
+<span class="sd">     it under the terms of the GNU General Public License as published by</span>
+<span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
+<span class="sd">     (at your option) any later version.</span>
+
+<span class="sd">.. todo:: Check raster is single band</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&#39;10/01/2011&#39;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Copyright 2012, Australia Indonesia Facility for &#39;</span>
+                 <span class="s">&#39;Disaster Reduction&#39;</span><span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="kn">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">ui_riab</span> <span class="kn">import</span> <span class="n">Ui_Riab</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># Check if a pydevpath.txt file exists in the plugin folder (you</span>
+<span class="c"># need to rename it from settings.txt.templ in the standard plugin</span>
+<span class="c"># distribution) and if it does, read the pydevd path from it and</span>
+<span class="c"># enable the debug flag to true. Please see:</span>
+<span class="c"># http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/</span>
+<span class="c"># for notes on setting up the debugging environment.</span>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&#39;pydevpath.txt&#39;</span><span class="p">))</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">PATH</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">PYDEVD_PATH</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s">&#39;rt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PYDEVD_PATH</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">pydevd</span> <span class="kn">import</span> <span class="o">*</span>
+        <span class="k">print</span> <span class="s">&#39;Debugging is enabled.&#39;</span>
+        <span class="c">#print sys.path</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c">#fail silently</span>
+        <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QGis</span><span class="p">,</span> <span class="n">QgsMapLayer</span><span class="p">,</span> <span class="n">QgsVectorLayer</span><span class="p">,</span> <span class="n">QgsMapLayerRegistry</span>
+<span class="kn">from</span> <span class="nn">impactcalculator</span> <span class="kn">import</span> <span class="n">ImpactCalculator</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+
+<div class="viewcode-block" id="RiabDialog"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog">[docs]</a><span class="k">class</span> <span class="nc">RiabDialog</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Dialog implementation class for the Risk In A Box plugin.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iface</span><span class="p">,</span> <span class="n">guiContext</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor for the dialog.</span>
+
+<span class="sd">        This dialog will allow the user to select layers and scenario details</span>
+<span class="sd">        and subsequently run their model.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">           * iface - a Quantum GIS QGisAppInterface instance.</span>
+<span class="sd">           * guidContext - an optional paramter, defaults to True. Set to</span>
+<span class="sd">             False if you do not wish to see popup messages etc. Used</span>
+<span class="sd">             mainly by init tests.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           not applicable</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           no exceptions explicitly raised</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="c"># settrace()</span>
+            <span class="k">pass</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c"># Save reference to the QGIS interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span> <span class="o">=</span> <span class="n">iface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suppressDialogsFlag</span> <span class="o">=</span> <span class="n">guiContext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span> <span class="o">=</span> <span class="n">ImpactCalculator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># Set up the user interface from Designer.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Riab</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getLayers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getFunctions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setOkButtonStatus</span><span class="p">()</span>
+        <span class="n">myButton</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">Help</span><span class="p">)</span>
+        <span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">myButton</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s">&#39;clicked()&#39;</span><span class="p">),</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">showHelp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showHelp</span><span class="p">()</span>
+        <span class="n">myButton</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">Reset</span><span class="p">)</span>
+        <span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">myButton</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s">&#39;clicked()&#39;</span><span class="p">),</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">resetForm</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RiabDialog.validate"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper method to evaluate the current state of the dialog and</span>
+<span class="sd">        determine if it is appropriate for the OK button to be enabled</span>
+<span class="sd">        or not.</span>
+
+<span class="sd">        .. note:: The enabled state of the OK button on the dialog will</span>
+<span class="sd">           NOT be updated (set True or False) depending on the outcome of</span>
+<span class="sd">           the UI readiness tests performed - **only** True or False</span>
+<span class="sd">           will be returned by the function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           A two-tuple consisting of:</span>
+
+<span class="sd">           * Boolean reflecting the results of the valudation tests.</span>
+<span class="sd">           * A message indicating any reason why the validation may</span>
+<span class="sd">             have failed.</span>
+
+<span class="sd">           Example::</span>
+
+<span class="sd">               flag,msg = self.ui.validate()</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">           no exceptions explicitly raised</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myHazardIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="n">myExposureIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">myHazardIndex</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">myExposureIndex</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">myMessage</span> <span class="o">=</span> <span class="s">&#39;Please ensure both Hazard layer and &#39;</span> <span class="o">+</span> \
+            <span class="s">&#39;Exposure layer are set before clicking OK.&#39;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">myMessage</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.setOkButtonStatus"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.setOkButtonStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setOkButtonStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to set the ok button status if the</span>
+<span class="sd">        form is valid and disable it if it is not.</span>
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           no exceptions explicitly raised.&quot;&quot;&quot;</span>
+        <span class="n">myButton</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+        <span class="n">myFlag</span><span class="p">,</span> <span class="n">myMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">myButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">myFlag</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">myMessage</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.getLayers"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.getLayers">[docs]</a>    <span class="k">def</span> <span class="nf">getLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to obtain a list of layers currently loaded in QGIS.</span>
+
+<span class="sd">        On invocation, this method will populate cboHazard and</span>
+<span class="sd">        cboExposure on the dialog with a list of available layers. Only</span>
+<span class="sd">        **singleband raster** layers will be added to the hazard layer list,</span>
+<span class="sd">        and only **point vector** layers will be added to the exposure layer</span>
+<span class="sd">        list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           None</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           no</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mapCanvas</span><span class="p">()</span><span class="o">.</span><span class="n">layers</span><span class="p">())):</span>
+            <span class="n">myLayer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mapCanvas</span><span class="p">()</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            .. todo:: check raster is single band</span>
+<span class="sd">                      store uuid in user property of list widget for layers</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QgsMapLayer</span><span class="o">.</span><span class="n">RasterLayer</span><span class="p">:</span>
+                <span class="n">myName</span> <span class="o">=</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+                <span class="n">mySource</span> <span class="o">=</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">source</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">myName</span><span class="p">,</span> <span class="n">mySource</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QgsMapLayer</span><span class="o">.</span><span class="n">VectorLayer</span><span class="p">:</span>
+                <span class="n">myName</span> <span class="o">=</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+                <span class="n">mySource</span> <span class="o">=</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">source</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">myName</span><span class="p">,</span> <span class="n">mySource</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c"># skip the layer</span>
+
+        <span class="k">return</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.getFunctions"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.getFunctions">[docs]</a>    <span class="k">def</span> <span class="nf">getFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to obtain a list of impact functions from</span>
+<span class="sd">        the impact calculator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           None</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           no</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">availableFunctions</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">myFunction</span> <span class="ow">in</span> <span class="n">myList</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">myFunction</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">suppressDialogsFlag</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="s">&#39;Function list retireval error&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.accept"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.accept">[docs]</a>    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Execute analysis when ok button is clicked.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enableBusyCursor</span><span class="p">()</span>
+        <span class="c">#QtGui.QMessageBox.information(self, &quot;Risk In A Box&quot;, &quot;testing...&quot;)</span>
+        <span class="n">myFlag</span><span class="p">,</span> <span class="n">myMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">myFlag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">myMessage</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disableBusyCursor</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myHazardIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+            <span class="n">myHazardFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">itemData</span><span class="p">(</span><span class="n">myHazardIndex</span><span class="p">,</span>
+                                 <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">UserRole</span><span class="p">)</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setHazardLayer</span><span class="p">(</span><span class="n">myHazardFileName</span><span class="p">)</span>
+
+            <span class="n">myExposureIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+            <span class="n">myExposureFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">itemData</span><span class="p">(</span><span class="n">myExposureIndex</span><span class="p">,</span>
+                                 <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">UserRole</span><span class="p">)</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setExposureLayer</span><span class="p">(</span><span class="n">myExposureFileName</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+            <span class="c"># start it in its own thread</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getRunner</span><span class="p">()</span>
+
+            <span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">notifier</span><span class="p">(),</span>
+                               <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s">&#39;done()&#39;</span><span class="p">),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disableBusyCursor</span><span class="p">()</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;An exception occurred when starting the model: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.completed"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.completed">[docs]</a>    <span class="k">def</span> <span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Slot activated when the process is done.&quot;&quot;&quot;</span>
+
+        <span class="n">myMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+        <span class="n">myFilename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">filename</span><span class="p">()</span>
+        <span class="n">myReport</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">myFilename</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">myReport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(</span>
+                                            <span class="n">myFilename</span><span class="p">,</span> <span class="s">&#39;caption&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">myMessage</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">myFilename</span> <span class="o">+</span>
+                                          <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">myReport</span><span class="p">)</span>
+                <span class="n">myVectorPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">(),</span> <span class="n">myFilename</span><span class="p">)</span>
+                <span class="n">myName</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;X&#39;</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;X&#39;</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+                <span class="n">myVectorLayer</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">myVectorPath</span><span class="p">,</span> <span class="n">myName</span><span class="p">,</span> <span class="s">&#39;ogr&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">myVectorLayer</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Vector layer &quot;</span><span class="si">%s</span><span class="s">&quot; is not valid&#39;</span> <span class="o">%</span> <span class="n">myFilename</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">disableBusyCursor</span><span class="p">()</span>
+                    <span class="k">return</span>
+                <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">addMapLayer</span><span class="p">(</span><span class="n">myVectorLayer</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setHtml</span><span class="p">(</span><span class="n">myMessage</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">myFilename</span> <span class="o">+</span>
+                                 <span class="s">&#39;</span><span class="se">\n</span><span class="s">Error:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">disableBusyCursor</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.showHelp"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.showHelp">[docs]</a>    <span class="k">def</span> <span class="nf">showHelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load the help text into the wvResults widget&quot;&quot;&quot;</span>
+        <span class="n">myPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&#39;docs&#39;</span><span class="p">,</span> <span class="s">&#39;build&#39;</span><span class="p">,</span>
+                                            <span class="s">&#39;html&#39;</span><span class="p">,</span> <span class="s">&#39;README.html&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">wvResults</span><span class="o">.</span><span class="n">setUrl</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QUrl</span><span class="p">(</span><span class="s">&#39;file:///&#39;</span> <span class="o">+</span> <span class="n">myPath</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.resetForm"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.resetForm">[docs]</a>    <span class="k">def</span> <span class="nf">resetForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the form contents to their onload state.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showHelp</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.enableBusyCursor"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.enableBusyCursor">[docs]</a>    <span class="k">def</span> <span class="nf">enableBusyCursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the hourglass enabled.&quot;&quot;&quot;</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">qApp</span><span class="o">.</span><span class="n">setOverrideCursor</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QCursor</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">WaitCursor</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="RiabDialog.disableBusyCursor"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.disableBusyCursor">[docs]</a>    <span class="k">def</span> <span class="nf">disableBusyCursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Disable the hourglass cursor&quot;&quot;&quot;</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">qApp</span><span class="o">.</span><span class="n">restoreOverrideCursor</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

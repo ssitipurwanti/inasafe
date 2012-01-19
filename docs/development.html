@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Risk-in-a-box Developer Documentation &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="index.html" />
+    <link rel="prev" title="Risk-in-a-box User Documentation" href="README.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>Risk-in-a-box Developer Documentation</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="README.html">Risk-in-a-box User Documentation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="risk-in-a-box-developer-documentation">
+<h1>Risk-in-a-box Developer Documentation<a class="headerlink" href="#risk-in-a-box-developer-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="code-documentation">
+<h2>Code documentation<a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="api-docs.html"><em>Risk-In-A-Box&#8217;s API documentation</em></a></li>
+<li><a class="reference internal" href="todo.html"><em>Todo List</em></a></li>
+</ul>
+</div>
+<div class="section" id="requirements-to-develop-risk-in-a-box">
+<h2>Requirements to develop Risk-in-a-Box<a class="headerlink" href="#requirements-to-develop-risk-in-a-box" title="Permalink to this headline">¶</a></h2>
+<p>Risk-in-a-box is built in python and runs as a plugin in <a class="reference external" href="http://qgis.org">QGIS</a>.  The Graphical User Interface components are built using
+<a class="reference external" href="http://www.riverbankcomputing.co.uk/software/pyqt/intro">PyQt4</a> and the QGIS
+plugin API (useful resources: <a class="reference external" href="http://qgis.org/pyqgis-cookbook/">the QGIS Python Cookbook</a> and <a class="reference external" href="http://qgis.org/api/">the QGIS C++ API documentation</a>).  As such it is helpful if you are familiar with these
+technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed
+on your machine in order to work effectively with the code base:</p>
+<ul class="simple">
+<li>git</li>
+<li>subversion</li>
+<li>pep8</li>
+<li>nosetests (with coverage plugin)</li>
+<li>python-numpy</li>
+<li>python-gdal</li>
+<li>python-sphinx</li>
+<li>...</li>
+</ul>
+<p>On an ubuntu system you can install these requirements using apt:</p>
+<div class="highlight-python"><pre>sudo apt-get install git subversion pep8 python-nose python-coverage \
+python-gdal python-numpy python-sphinx</pre>
+</div>
+<p>In some cases these dependencies may already be on your system via installation
+process you followed for QGIS.</p>
+</div>
+<div class="section" id="quick-installation-guide-developers">
+<h2>Quick Installation Guide - Developers<a class="headerlink" href="#quick-installation-guide-developers" title="Permalink to this headline">¶</a></h2>
+<p>To develop on the plugin, you first need to copy it to your local system. If you are a developer,
+the simplest way to do that is go to <cite>~/.qgis/python/plugins</cite> and clone risk_in_a_box from our GitHub
+repository page like this:</p>
+<div class="highlight-python"><pre>git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
+git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)</pre>
+</div>
+<dl class="docutils">
+<dt>NOTE FOR TREVOR: Temporarily, to download the test data the first time, do::</dt>
+<dd>python storage/test_io.py</dd>
+</dl>
+<p>(If asked for a username or password use: anonymous and &lt;blank&gt;)</p>
+<p>To verify that the installation works you can run the test suite from the command line:</p>
+<div class="highlight-python"><pre>make test</pre>
+</div>
+<p>This will run all the regression tests and also highlight any code issues.
+Note that first time the tests are run they will pull 250MB of test data from our subversion repository.</p>
+<p>To run the plugin restart QGIS. If you wish to
+an IDE for development, please refer to <a class="reference external" href="http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/">this article</a>
+for detailed information on how you can do so.</p>
+<p>If you wish to debug the plugin, (referring once again to the above article), make a copy
+of pydevpath.txt.templ to pydevpath.txt e.g.:</p>
+<div class="highlight-python"><pre>cp pydevpath.txt.templ pydevpath.txt</pre>
+</div>
+<p>Then replace the path to your pydevd module as described in the above article.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are running with remote debugging enabled, be sure to start the
+PyDev debug server first before launching the Risk-in-a-box QGIS plugin
+otherwise QGIS will likely crash when it can&#8217;t find the debug server.</p>
+</div>
+<p># If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
+# and adjust the path contained in that file to match your QGIS installation path e.g.::
+#
+#  cp qgispath.txt.templ qgispath.txt
+#
+# In order to run the tests, you should install &#8216;discover&#8217; e.g.::
+#
+#  sudo pip install discover
+#
+# Then you can run the tests (from within the risk_in_a_box toplevel directory) like this::
+#
+#  python -m discover</p>
+</div>
+</div>
+<div class="section" id="coding-standards">
+<h1>Coding Standards<a class="headerlink" href="#coding-standards" title="Permalink to this headline">¶</a></h1>
+<p>Please observe the following coding standards when working on the codebase:</p>
+<ul class="simple">
+<li>Python style guide (PEP8): <a class="reference external" href="http://www.python.org/dev/peps/pep-0008">http://www.python.org/dev/peps/pep-0008</a></li>
+<li>Python documentation guide (PEP257): <a class="reference external" href="http://www.python.org/dev/peps/pep-0257">http://www.python.org/dev/peps/pep-0257</a></li>
+<li>Docstrings quoted with <tt class="samp docutils literal"><span class="pre">&quot;&quot;&quot;</span></tt></li>
+<li>Simple strings in source code should be quoted with <tt class="samp docutils literal"><span class="pre">'</span></tt></li>
+</ul>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="README.html">Risk-in-a-box User Documentation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

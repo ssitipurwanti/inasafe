@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_impactcalculator &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>test_impactcalculator</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for test_impactcalculator</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid -</span>
+<span class="sd">**Impact calculator test suite.**</span>
+
+<span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
+
+<span class="sd">.. note:: This program is free software; you can redistribute it and/or modify</span>
+<span class="sd">     it under the terms of the GNU General Public License as published by</span>
+<span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
+<span class="sd">     (at your option) any later version.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&#39;10/01/2011&#39;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Copyright 2012, Australia Indonesia Facility for &#39;</span>
+                 <span class="s">&#39;Disaster Reduction&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">impactcalculator</span> <span class="kn">import</span> <span class="n">ImpactCalculator</span>
+<span class="c">#from riabexceptions import TestNotImplementedException</span>
+<span class="kn">from</span> <span class="nn">riabexceptions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InsufficientParametersException</span><span class="p">,</span>
+                             <span class="n">KeywordNotFoundException</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ImpactCalculatorTest"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest">[docs]</a><span class="k">class</span> <span class="nc">ImpactCalculatorTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Test the risk in a box plugin stub&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ImpactCalculatorTest.setUp"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create shared resources that all tests can use&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span> <span class="o">=</span> <span class="n">ImpactCalculator</span><span class="p">()</span>
+        <span class="n">myRoot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">myRoot</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span>
+                                   <span class="s">&#39;Jakarta_sekolah.shp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rasterPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">myRoot</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span>
+                                    <span class="s">&#39;current_flood_depth_jakarta.asc&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setHazardLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rasterPath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setExposureLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setFunction</span><span class="p">(</span><span class="s">&#39;Flood Building Impact Function&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.tearDown"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tear down - destroy the QGIS app&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_properties"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_properties">[docs]</a>    <span class="k">def</span> <span class="nf">test_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test if the properties work as expected.&quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Vector property incorrect.&#39;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getExposureLayer</span><span class="p">()</span> <span class="o">==</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Raster property incorrect.&#39;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getHazardLayer</span><span class="p">()</span> <span class="o">==</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">rasterPath</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Function property incorrect.&#39;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getFunction</span><span class="p">()</span> <span class="o">==</span>
+               <span class="s">&#39;Flood Building Impact Function&#39;</span><span class="p">),</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_run"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_run">[docs]</a>    <span class="k">def</span> <span class="nf">test_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that run works as expected in non threading mode&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myRunner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getRunner</span><span class="p">()</span>
+            <span class="c"># run non threaded</span>
+            <span class="n">myRunner</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">myMessage</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="n">myFilename</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">filename</span><span class="p">()</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">myFilename</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">myFilename</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">myMessage</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">myMessage</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Calculator run failed.&#39;</span>
+            <span class="k">assert</span><span class="p">(),</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_thread"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_thread">[docs]</a>    <span class="k">def</span> <span class="nf">test_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that starting it in a thread works as expected.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myRunner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getRunner</span><span class="p">()</span>
+            <span class="n">myRunner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="c"># wait until the thread is done</span>
+            <span class="n">myRunner</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">myMessage</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="n">myFilename</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">filename</span><span class="p">()</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">myFilename</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">myFilename</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">myMessage</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">myMessage</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Calculator run failed:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">assert</span><span class="p">(),</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_startWithNoParameters"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_startWithNoParameters">[docs]</a>    <span class="k">def</span> <span class="nf">test_startWithNoParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that run raises an error properly</span>
+<span class="sd">           when no parameters are defined.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setExposureLayer</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">setHazardLayer</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+            <span class="c">#next line should raise an error</span>
+            <span class="n">myRunner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getRunner</span><span class="p">()</span>
+            <span class="n">myRunner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">InsufficientParametersException</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c"># expected outcome</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Missing parameters not raised as error.&#39;</span>
+            <span class="k">assert</span><span class="p">(),</span> <span class="n">msg</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Expected an error, none encountered.&#39;</span>
+        <span class="k">assert</span><span class="p">(),</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_availableFunctions"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_availableFunctions">[docs]</a>    <span class="k">def</span> <span class="nf">test_availableFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that we can get the available functions from</span>
+<span class="sd">        the impactcalculator.&quot;&quot;&quot;</span>
+        <span class="n">myList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">availableFunctions</span><span class="p">()</span>
+        <span class="k">print</span> <span class="n">myList</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">myList</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorTest.test_getMetadata"><a class="viewcode-back" href="../test_impactcalculator.html#test_impactcalculator.ImpactCalculatorTest.test_getMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">test_getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that we can get keyword data from a file with</span>
+<span class="sd">        a .keyword metadata file associated with it.&quot;&quot;&quot;</span>
+        <span class="n">myKeyword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span><span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Keyword request returned an empty string&#39;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">myKeyword</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;&#39;</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="c"># Test we get an exception if keyword is not found</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myKeyword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculator</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span><span class="p">,</span> <span class="s">&#39;boguskeyword&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">KeywordNotFoundException</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c"># this is good</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Request for bogus keyword raised incorrect exception&#39;</span> <span class="o">+</span>
+                    <span class="s">&#39; type: </span><span class="se">\n</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">assert</span><span class="p">(),</span> <span class="n">msg</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

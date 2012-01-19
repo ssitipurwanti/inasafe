@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Module: impactcalculator &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>Module: impactcalculator</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-impactcalculator">
+<h1>Module: impactcalculator<a class="headerlink" href="#module-impactcalculator" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the documentation for the Risk-In-A-Box <strong>impactcalculator</strong> module.</p>
+<span class="target" id="module-impactcalculator"></span><p>Disaster risk assessment tool developed by AusAid - <strong>impactcalculator.</strong></p>
+<p>Contact : <a class="reference external" href="mailto:ole&#46;moller&#46;nielsen&#37;&#52;&#48;gmail&#46;com">ole<span>&#46;</span>moller<span>&#46;</span>nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+</div>
+<dl class="class">
+<dt id="impactcalculator.CalculatorNotifier">
+<em class="property">class </em><tt class="descclassname">impactcalculator.</tt><tt class="descname">CalculatorNotifier</tt><a class="reference internal" href="_modules/impactcalculator.html#CalculatorNotifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.CalculatorNotifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple notification class so that we can
+listen for signals indicating when processing is
+done.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">impactcalculator</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">CalculatorNotifier</span><span class="p">()</span>
+<span class="n">n</span><span class="o">.</span><span class="n">done</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">showMessage</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">done</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Prints &#8216;hello&#8217; to the console</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="impactcalculator.ImpactCalculator">
+<em class="property">class </em><tt class="descclassname">impactcalculator.</tt><tt class="descname">ImpactCalculator</tt><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to compute an impact scenario.</p>
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.availableFunctions">
+<tt class="descname">availableFunctions</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.availableFunctions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.availableFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the riab engine to see what plugins are available.
+Args:</p>
+<blockquote>
+None.</blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A list of strings where each is a plugin name.</dd>
+<dt>Raises:</dt>
+<dd>NoFunctionsFoundException if not all parameters are
+set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.delExposureLayer">
+<tt class="descname">delExposureLayer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.delExposureLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.delExposureLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete: exposure layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.delFunction">
+<tt class="descname">delFunction</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.delFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.delFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete: function layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.delHazardLayer">
+<tt class="descname">delHazardLayer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.delHazardLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.delHazardLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete: hazard layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.getExposureLayer">
+<tt class="descname">getExposureLayer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.getExposureLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.getExposureLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor: exposure layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.getFunction">
+<tt class="descname">getFunction</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.getFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.getFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor: function layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.getHazardLayer">
+<tt class="descname">getHazardLayer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.getHazardLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.getHazardLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor: hazard layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.getMetadata">
+<tt class="descname">getMetadata</tt><big>(</big><em>layerpath</em>, <em>keyword</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.getMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.getMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get metadata from the keywords file associated with a layer.
+Args:</p>
+<blockquote>
+<ul class="simple">
+<li>layerpath - a string containing a path to a layer (raster</li>
+</ul>
+<blockquote>
+or vector)</blockquote>
+<ul class="simple">
+<li>keyword - the metadata keyword to retrieve e.g. &#8216;title&#8217;</li>
+</ul>
+</blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A list of strings where each is a plugin name.</dd>
+<dt>Raises:</dt>
+<dd><blockquote class="first">
+KeywordNotFoundException if the keyword is not recognised.</blockquote>
+<div class="admonition-todo last admonition " id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">cache the layer if io is too slow</p>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.getRunner">
+<tt class="descname">getRunner</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.getRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.getRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory to create a new runner thread.
+Requires three parameters to be set before execution
+can take place:</p>
+<ul class="simple">
+<li>Hazard layer - a path to a raster (string)</li>
+<li>Exposure layer - a path to a vector hazard layer (string).</li>
+<li>Function - a function name that defines how the Hazard assessment
+will be computed (string).</li>
+</ul>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+<dt>Raises:</dt>
+<dd>InsufficientParametersException if not all parameters are
+set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.make_ascii">
+<tt class="descname">make_ascii</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.make_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.make_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert QgsString to ASCII</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.setExposureLayer">
+<tt class="descname">setExposureLayer</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.setExposureLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.setExposureLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutator: exposure layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.setFunction">
+<tt class="descname">setFunction</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.setFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.setFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutator: function layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculator.setHazardLayer">
+<tt class="descname">setHazardLayer</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculator.setHazardLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculator.setHazardLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutator: hazard layer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="impactcalculator.ImpactCalculatorThread">
+<em class="property">class </em><tt class="descclassname">impactcalculator.</tt><tt class="descname">ImpactCalculatorThread</tt><big>(</big><em>theHazardLayer</em>, <em>theExposureLayer</em>, <em>theFunction</em><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculatorThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculatorThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>A threaded class to compute an impact scenario. Under
+python a thread can only be run once, so the instances
+based on this class are designed to be short lived.</p>
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculatorThread.filename">
+<tt class="descname">filename</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculatorThread.filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculatorThread.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the filename of the output from the
+last run.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculatorThread.notifier">
+<tt class="descname">notifier</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculatorThread.notifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculatorThread.notifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a qobject that will emit a &#8216;done&#8217; signal when the
+thread completes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculatorThread.result">
+<tt class="descname">result</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculatorThread.result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculatorThread.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the result of the last run.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="impactcalculator.ImpactCalculatorThread.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/impactcalculator.html#ImpactCalculatorThread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#impactcalculator.ImpactCalculatorThread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for hazard impact calculation thread.
+Requires three properties to be set before execution
+can take place:</p>
+<ul class="simple">
+<li>Hazard layer - a path to a raster,</li>
+<li>Exposure layer - a path to a vector points layer.</li>
+<li>Function - a function that defines how the Hazard assessment
+will be computed.</li>
+</ul>
+<p>After the thread is complete, you can use the filename and
+result accessors to determine what the result of the analysis was:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">calculator</span> <span class="o">=</span> <span class="n">ImpactCalculator</span><span class="p">()</span>
+<span class="n">myRoot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">vectorPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">myRoot</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span>
+                           <span class="s">&#39;Jakarta_sekolah.shp&#39;</span><span class="p">)</span>
+<span class="n">rasterPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">myRoot</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span>
+                          <span class="s">&#39;current_flood_depth_jakarta.asc&#39;</span><span class="p">)</span>
+<span class="n">calculator</span><span class="o">.</span><span class="n">setHazardLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rasterPath</span><span class="p">)</span>
+<span class="n">calculator</span><span class="o">.</span><span class="n">setExposureLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vectorPath</span><span class="p">)</span>
+<span class="n">calculator</span><span class="o">.</span><span class="n">setFunction</span><span class="p">(</span><span class="s">&#39;Flood Building Impact Function&#39;</span><span class="p">)</span>
+<span class="n">myRunner</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">getRunner</span><span class="p">()</span>
+<span class="c">#wait till completion</span>
+<span class="n">myRunner</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">myResult</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">myFilename</span> <span class="o">=</span> <span class="n">myRunner</span><span class="o">.</span><span class="n">filename</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+<dt>Raises:</dt>
+<dd>None
+set.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>test_riabdialog &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>test_riabdialog</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for test_riabdialog</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid - **GUI Test Cases.**</span>
+
+<span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
+
+<span class="sd">.. note:: This program is free software; you can redistribute it and/or modify</span>
+<span class="sd">     it under the terms of the GNU General Public License as published by</span>
+<span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
+<span class="sd">     (at your option) any later version.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&#39;10/01/2011&#39;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Copyright 2012, Australia Indonesia Facility for &#39;</span>
+                 <span class="s">&#39;Disaster Reduction&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="kn">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtTest</span> <span class="kn">import</span> <span class="n">QTest</span>
+<span class="kn">from</span> <span class="nn">riabexceptions</span> <span class="kn">import</span> <span class="n">QgisPathException</span>
+
+<span class="c"># Check if a qgispath.txt file exists in the plugin folder (you</span>
+<span class="c"># need to rename it from qgispath.txt.templ in the standard plugin</span>
+<span class="c"># distribution) and if it does, read the qgis path</span>
+
+<span class="n">ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&#39;qgispath.txt&#39;</span><span class="p">))</span>
+<span class="n">QGIS_PATH</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># e.g. /usr/local if QGIS is installed under there</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">PATH</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">QGIS_PATH</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s">&#39;rt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">QGIS_PATH</span><span class="p">,</span> <span class="s">&#39;share&#39;</span><span class="p">,</span> <span class="s">&#39;qgis&#39;</span><span class="p">,</span> <span class="s">&#39;python&#39;</span><span class="p">))</span>
+        <span class="c">#print sys.path</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">QgisPathException</span>
+
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsApplication</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsVectorLayer</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsRasterLayer</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsMapLayerRegistry</span>
+<span class="kn">from</span> <span class="nn">qgis.gui</span> <span class="kn">import</span> <span class="n">QgsMapCanvas</span><span class="p">,</span> <span class="n">QgsMapCanvasLayer</span>
+<span class="kn">from</span> <span class="nn">qgisinterface</span> <span class="kn">import</span> <span class="n">QgisInterface</span>
+<span class="kn">from</span> <span class="nn">riabdialog</span> <span class="kn">import</span> <span class="n">RiabDialog</span>
+
+
+<div class="viewcode-block" id="RiabDialogTest"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest">[docs]</a><span class="k">class</span> <span class="nc">RiabDialogTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Test the risk in a box GUI&quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="RiabDialogTest.setUp"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an app that all tests can use&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;RiabDialogTest - setUp called&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">:</span>
+            <span class="n">myGuiFlag</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c"># We need to enable qgis app in gui mode</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">QgsApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">,</span> <span class="n">myGuiFlag</span><span class="p">)</span>
+            <span class="n">myUseDefaultPathFlag</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">setPrefixPath</span><span class="p">(</span><span class="n">QGIS_PATH</span><span class="p">,</span> <span class="n">myUseDefaultPathFlag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">initQgis</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">QgsMapCanvas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">iface</span> <span class="o">=</span> <span class="n">QgisInterface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">)</span>
+            <span class="n">myGuiContextFlag</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span> <span class="o">=</span> <span class="n">RiabDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span> <span class="n">myGuiContextFlag</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.tearDown"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tear down - destroy the QGIS app&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;RiabDialogTest tearDown called&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destructor reimplemented to gracefully exit QGIS.&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;Destoying dialog&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;Destroying canvas&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;Destroying parent widget&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;Unloading all layers&#39;</span>
+        <span class="k">for</span> <span class="n">myLayer</span> <span class="ow">in</span> <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">mapLayers</span><span class="p">():</span>
+            <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">removeMapLayer</span><span class="p">(</span><span class="n">myLayer</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="s">&#39;Exiting QGIS&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exitQgis</span><span class="p">()</span>
+
+<div class="viewcode-block" id="RiabDialogTest.clearForm"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.clearForm">[docs]</a>    <span class="k">def</span> <span class="nf">clearForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to  set all form elements to default state&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.populateForm"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.populateForm">[docs]</a>    <span class="k">def</span> <span class="nf">populateForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A helper function to populate the form and set it to a</span>
+<span class="sd">        valid state.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadLayers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c">#QTest.mouseClick(myHazardItem, Qt.LeftButton)</span>
+        <span class="c">#QTest.mouseClick(myExposureItem, Qt.LeftButton)</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.Xtest_defaults"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.Xtest_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">Xtest_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test the GUI in its default state&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboFunction</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.Xtest_validate"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.Xtest_validate">[docs]</a>    <span class="k">def</span> <span class="nf">Xtest_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that the validate function works as expected.&quot;&quot;&quot;</span>
+        <span class="c"># First check that we DONT validate a clear form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearForm</span><span class="p">()</span>
+        <span class="n">myFlag</span><span class="p">,</span> <span class="n">myMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNot</span><span class="p">(</span><span class="n">myMessage</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;No reason for failure given&#39;</span><span class="p">)</span>
+        <span class="n">myMessage</span> <span class="o">=</span> <span class="s">&#39;Validation expected to fail on a cleared form.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">myFlag</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">myMessage</span><span class="p">)</span>
+        <span class="c"># Now check we DO validate a populated form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populateForm</span><span class="p">()</span>
+        <span class="n">myFlag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">myMessage</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Validation expected to pass on&#39;</span> <span class="o">+</span>
+                     <span class="s">&#39; a populated for with selections.&#39;</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">myFlag</span><span class="p">),</span> <span class="n">myMessage</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.Xtest_setOkButtonStatus"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.Xtest_setOkButtonStatus">[docs]</a>    <span class="k">def</span> <span class="nf">Xtest_setOkButtonStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that the OK button changes properly according to</span>
+<span class="sd">        form validity.&quot;&quot;&quot;</span>
+        <span class="c"># First check that we ok ISNT enabled on a clear form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearForm</span><span class="p">()</span>
+        <span class="n">myFlag</span><span class="p">,</span> <span class="n">myMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNot</span><span class="p">(</span><span class="n">myMessage</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;No reason for failure given&#39;</span><span class="p">)</span>
+        <span class="n">myMessage</span> <span class="o">=</span> <span class="s">&#39;Validation expected to fail on a cleared form.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">myFlag</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">myMessage</span><span class="p">)</span>
+        <span class="c"># Now check OK IS enabled on a populated form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populateForm</span><span class="p">()</span>
+        <span class="n">myFlag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">myMessage</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Validation expected to pass on a &#39;</span> <span class="o">+</span>
+                     <span class="s">&#39;populated form with selections.&#39;</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">myFlag</span><span class="p">),</span> <span class="n">myMessage</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.Xtest_run"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.Xtest_run">[docs]</a>    <span class="k">def</span> <span class="nf">Xtest_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test that the ok button works as expected&quot;&quot;&quot;</span>
+        <span class="c"># Push OK with the left mouse button</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearForm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadLayers</span><span class="p">()</span>
+        <span class="n">myOkWidget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">buttonBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+        <span class="n">QTest</span><span class="o">.</span><span class="n">mouseClick</span><span class="p">(</span><span class="n">myOkWidget</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftButton</span><span class="p">)</span>
+        <span class="c">#QTest.keyClicks(</span>
+        <span class="c">#  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), &quot; &quot;)</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.loadLayers"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.loadLayers">[docs]</a>    <span class="k">def</span> <span class="nf">loadLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to load layers into the dialog.&quot;&quot;&quot;</span>
+        <span class="c"># First unload any layers that may already be loaded</span>
+        <span class="k">for</span> <span class="n">myLayer</span> <span class="ow">in</span> <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">mapLayers</span><span class="p">():</span>
+            <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">removeMapLayer</span><span class="p">(</span><span class="n">myLayer</span><span class="p">)</span>
+        <span class="c"># Now go ahead and load our layers</span>
+        <span class="n">myVectorPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span> <span class="s">&#39;Jakarta_sekolah.shp&#39;</span><span class="p">)</span>
+        <span class="n">myVectorLayer</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">myVectorPath</span><span class="p">,</span> <span class="s">&#39;points&#39;</span><span class="p">,</span> <span class="s">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Vector layer &quot;</span><span class="si">%s</span><span class="s">&quot; is not valid&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">myVectorLayer</span><span class="o">.</span><span class="n">source</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="n">myVectorLayer</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="n">msg</span>
+
+        <span class="n">myRasterPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&#39;testdata&#39;</span><span class="p">,</span>
+                                    <span class="s">&#39;current_flood_depth_jakarta.asc&#39;</span><span class="p">)</span>
+        <span class="n">myFileInfo</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QFileInfo</span><span class="p">(</span><span class="n">myRasterPath</span><span class="p">)</span>
+        <span class="n">myBaseName</span> <span class="o">=</span> <span class="n">myFileInfo</span><span class="o">.</span><span class="n">baseName</span><span class="p">()</span>
+        <span class="n">myRasterLayer</span> <span class="o">=</span> <span class="n">QgsRasterLayer</span><span class="p">(</span><span class="n">myRasterPath</span><span class="p">,</span> <span class="n">myBaseName</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Raster layer &quot;</span><span class="si">%s</span><span class="s">&quot; is not valid&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">myRasterLayer</span><span class="o">.</span><span class="n">source</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="n">myRasterLayer</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="n">msg</span>
+
+        <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">addMapLayer</span><span class="p">(</span><span class="n">myVectorLayer</span><span class="p">)</span>
+        <span class="n">myVectorCanvasLayer</span> <span class="o">=</span> <span class="n">QgsMapCanvasLayer</span><span class="p">(</span><span class="n">myVectorLayer</span><span class="p">)</span>
+        <span class="n">QgsMapLayerRegistry</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">addMapLayer</span><span class="p">(</span><span class="n">myRasterLayer</span><span class="p">)</span>
+        <span class="n">myRasterCanvasLayer</span> <span class="o">=</span> <span class="n">QgsMapCanvasLayer</span><span class="p">(</span><span class="n">myRasterLayer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">setLayerSet</span><span class="p">([</span><span class="n">myVectorCanvasLayer</span><span class="p">,</span> <span class="n">myRasterCanvasLayer</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">getLayers</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="RiabDialogTest.Xtest_loadLayers"><a class="viewcode-back" href="../test_riabdialog.html#test_riabdialog.RiabDialogTest.Xtest_loadLayers">[docs]</a>    <span class="k">def</span> <span class="nf">Xtest_loadLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load some layers in the canvas, call load layers</span>
+<span class="sd">         and verify that the list widget was update appropriately</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearForm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadLayers</span><span class="p">()</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Expect 1 layer in hazard list widget but got </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+              <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboHazard</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">msg</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Expect 1 layer in exposure list widget but got </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+              <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">cboExposure</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">msg</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

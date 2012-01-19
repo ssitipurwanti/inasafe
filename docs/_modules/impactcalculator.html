@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>impactcalculator &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>impactcalculator</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for impactcalculator</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid - **impactcalculator.**</span>
+
+<span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
+
+<span class="sd">.. note:: This program is free software; you can redistribute it and/or modify</span>
+<span class="sd">     it under the terms of the GNU General Public License as published by</span>
+<span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
+<span class="sd">     (at your option) any later version.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com, ole.moller.nielsen@gmail.com&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&#39;11/01/2011&#39;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Copyright 2012, Australia Indonesia Facility for &#39;</span>
+                 <span class="s">&#39;Disaster Reduction&#39;</span><span class="p">)</span>
+
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+<span class="kn">from</span> <span class="nn">riabexceptions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InsufficientParametersException</span><span class="p">,</span>
+                            <span class="n">NoFunctionsFoundException</span><span class="p">,</span>
+                            <span class="n">KeywordNotFoundException</span><span class="p">)</span>
+
+<span class="c"># Add parent directory to path to make test aware of other modules</span>
+<span class="n">pardir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pardir</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">impact_functions</span> <span class="kn">import</span> <span class="n">get_plugins</span>
+<span class="kn">from</span> <span class="nn">engine.core</span> <span class="kn">import</span> <span class="n">calculate_impact</span>
+<span class="kn">from</span> <span class="nn">storage.core</span> <span class="kn">import</span> <span class="n">read_layer</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">pyqtSignal</span>
+
+
+<div class="viewcode-block" id="ImpactCalculator"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator">[docs]</a><span class="k">class</span> <span class="nc">ImpactCalculator</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A class to compute an impact scenario.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor for the impact calculator.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__function</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="ImpactCalculator.getExposureLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.getExposureLayer">[docs]</a>    <span class="k">def</span> <span class="nf">getExposureLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accessor: exposure layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.setExposureLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.setExposureLayer">[docs]</a>    <span class="k">def</span> <span class="nf">setExposureLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mutator: exposure layer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.delExposureLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.delExposureLayer">[docs]</a>    <span class="k">def</span> <span class="nf">delExposureLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete: exposure layer.&quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.getHazardLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.getHazardLayer">[docs]</a>    <span class="k">def</span> <span class="nf">getHazardLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accessor: hazard layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.setHazardLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.setHazardLayer">[docs]</a>    <span class="k">def</span> <span class="nf">setHazardLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mutator: hazard layer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.delHazardLayer"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.delHazardLayer">[docs]</a>    <span class="k">def</span> <span class="nf">delHazardLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete: hazard layer.&quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.getFunction"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.getFunction">[docs]</a>    <span class="k">def</span> <span class="nf">getFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accessor: function layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__function</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.setFunction"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.setFunction">[docs]</a>    <span class="k">def</span> <span class="nf">setFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mutator: function layer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__function</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.delFunction"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.delFunction">[docs]</a>    <span class="k">def</span> <span class="nf">delFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete: function layer.&quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__function</span>
+</div>
+    <span class="n">_hazard_layer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">getHazardLayer</span><span class="p">,</span> <span class="n">setHazardLayer</span><span class="p">,</span>
+        <span class="n">delHazardLayer</span><span class="p">,</span> <span class="s">&quot;&quot;&quot;Hazard layer property  (e.g. a flood depth</span>
+<span class="s">        raster).&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">_exposure_layer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">getExposureLayer</span><span class="p">,</span> <span class="n">setExposureLayer</span><span class="p">,</span>
+        <span class="n">delExposureLayer</span><span class="p">,</span> <span class="s">&quot;&quot;&quot;Exposure layer property (e.g. buildings or</span>
+<span class="s">        features that will be affected).&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">_function</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">getFunction</span><span class="p">,</span> <span class="n">setFunction</span><span class="p">,</span>
+        <span class="n">delFunction</span><span class="p">,</span> <span class="s">&quot;&quot;&quot;Function property (specifies which</span>
+<span class="s">        riab function to use to process the hazard and exposure</span>
+<span class="s">        layers with.&quot;&quot;&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImpactCalculator.availableFunctions"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.availableFunctions">[docs]</a>    <span class="k">def</span> <span class="nf">availableFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Query the riab engine to see what plugins are available.</span>
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           A list of strings where each is a plugin name.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">           NoFunctionsFoundException if not all parameters are</span>
+<span class="sd">           set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myList</span> <span class="o">=</span> <span class="n">get_plugins</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">myList</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">myMessage</span> <span class="o">=</span> <span class="s">&#39;No RIAB impact functions could be found&#39;</span>
+            <span class="k">raise</span> <span class="n">NoFunctionsFoundException</span><span class="p">(</span><span class="n">myMessage</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">myList</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.getMetadata"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.getMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layerpath</span><span class="p">,</span> <span class="n">keyword</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get metadata from the keywords file associated with a layer.</span>
+<span class="sd">        Args:</span>
+
+<span class="sd">           * layerpath - a string containing a path to a layer (raster</span>
+<span class="sd">            or vector)</span>
+<span class="sd">           * keyword - the metadata keyword to retrieve e.g. &#39;title&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           A list of strings where each is a plugin name.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">           KeywordNotFoundException if the keyword is not recognised.</span>
+
+<span class="sd">         .. todo::</span>
+<span class="sd">            cache the layer if io is too slow</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myValue</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">read_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_ascii</span><span class="p">(</span><span class="n">layerpath</span><span class="p">))</span>
+              <span class="o">.</span><span class="n">get_keywords</span><span class="p">(</span><span class="n">keyword</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Keyword retrieval failed for </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">) </span><span class="se">\n</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">layerpath</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">KeywordNotFoundException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">myValue</span> <span class="ow">or</span> <span class="n">myValue</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;No value was found for keyword </span><span class="si">%s</span><span class="s"> in layer </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">layerpath</span><span class="p">,</span> <span class="n">keyword</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">KeywordNotFoundException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">myValue</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.make_ascii"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.make_ascii">[docs]</a>    <span class="k">def</span> <span class="nf">make_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert QgsString to ASCII&quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">,</span> <span class="s">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculator.getRunner"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculator.getRunner">[docs]</a>    <span class="k">def</span> <span class="nf">getRunner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Factory to create a new runner thread.</span>
+<span class="sd">        Requires three parameters to be set before execution</span>
+<span class="sd">        can take place:</span>
+
+<span class="sd">        * Hazard layer - a path to a raster (string)</span>
+<span class="sd">        * Exposure layer - a path to a vector hazard layer (string).</span>
+<span class="sd">        * Function - a function name that defines how the Hazard assessment</span>
+<span class="sd">          will be computed (string).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           None</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           InsufficientParametersException if not all parameters are</span>
+<span class="sd">           set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Error: Hazard layer not set.&#39;</span>
+            <span class="k">raise</span> <span class="n">InsufficientParametersException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Error: Exposure layer not set.&#39;</span>
+            <span class="k">raise</span> <span class="n">InsufficientParametersException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__function</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__function</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Error: Function not set.&#39;</span>
+            <span class="k">raise</span> <span class="n">InsufficientParametersException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c"># Call impact calculation engine</span>
+        <span class="n">myHazardLayer</span> <span class="o">=</span> <span class="n">read_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_ascii</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__hazard_layer</span><span class="p">))</span>
+        <span class="n">myExposureLayer</span> <span class="o">=</span> <span class="n">read_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_ascii</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__exposure_layer</span><span class="p">))</span>
+        <span class="n">myFunctions</span> <span class="o">=</span> <span class="n">get_plugins</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_ascii</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__function</span><span class="p">))</span>
+        <span class="n">myFunction</span> <span class="o">=</span> <span class="n">myFunctions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">make_ascii</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__function</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">ImpactCalculatorThread</span><span class="p">(</span><span class="n">myHazardLayer</span><span class="p">,</span>
+                                      <span class="n">myExposureLayer</span><span class="p">,</span>
+                                      <span class="n">myFunction</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="CalculatorNotifier"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.CalculatorNotifier">[docs]</a><span class="k">class</span> <span class="nc">CalculatorNotifier</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A simple notification class so that we can</span>
+<span class="sd">    listen for signals indicating when processing is</span>
+<span class="sd">    done.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">      from impactcalculator import *</span>
+<span class="sd">      n = CalculatorNotifier()</span>
+<span class="sd">      n.done.connect(n.showMessage)</span>
+<span class="sd">      n.done.emit()</span>
+
+<span class="sd">    Prints &#39;hello&#39; to the console</span>
+<span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">showMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;hello&quot;</span>
+
+</div>
+<div class="viewcode-block" id="ImpactCalculatorThread"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculatorThread">[docs]</a><span class="k">class</span> <span class="nc">ImpactCalculatorThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A threaded class to compute an impact scenario. Under</span>
+<span class="sd">        python a thread can only be run once, so the instances</span>
+<span class="sd">        based on this class are designed to be short lived.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theHazardLayer</span><span class="p">,</span> <span class="n">theExposureLayer</span><span class="p">,</span>
+                 <span class="n">theFunction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor for the impact calculator thread.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">          * Hazard layer - a RIAB read_layer object containing the Hazard data.</span>
+<span class="sd">          * Exposure layer - a RIAB read_layer object containing the Exposure</span>
+<span class="sd">            data.</span>
+<span class="sd">          * Function - a RIAB function that defines how the Hazard assessment</span>
+<span class="sd">            will be computed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           None</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           InsufficientParametersException if not all parameters are</span>
+<span class="sd">           set.</span>
+
+<span class="sd">        Requires three parameters to be set before execution</span>
+<span class="sd">        can take place:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hazardLayer</span> <span class="o">=</span> <span class="n">theHazardLayer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposureLayer</span> <span class="o">=</span> <span class="n">theExposureLayer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_function</span> <span class="o">=</span> <span class="n">theFunction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_notifier</span> <span class="o">=</span> <span class="n">CalculatorNotifier</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="ImpactCalculatorThread.notifier"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculatorThread.notifier">[docs]</a>    <span class="k">def</span> <span class="nf">notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a qobject that will emit a &#39;done&#39; signal when the</span>
+<span class="sd">        thread completes.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_notifier</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorThread.filename"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculatorThread.filename">[docs]</a>    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the filename of the output from the</span>
+<span class="sd">        last run.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorThread.result"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculatorThread.result">[docs]</a>    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the result of the last run.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result</span>
+</div>
+<div class="viewcode-block" id="ImpactCalculatorThread.run"><a class="viewcode-back" href="../impactcalculator.html#impactcalculator.ImpactCalculatorThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Main function for hazard impact calculation thread.</span>
+<span class="sd">        Requires three properties to be set before execution</span>
+<span class="sd">        can take place:</span>
+
+<span class="sd">        * Hazard layer - a path to a raster,</span>
+<span class="sd">        * Exposure layer - a path to a vector points layer.</span>
+<span class="sd">        * Function - a function that defines how the Hazard assessment</span>
+<span class="sd">          will be computed.</span>
+
+<span class="sd">        After the thread is complete, you can use the filename and</span>
+<span class="sd">        result accessors to determine what the result of the analysis was::</span>
+
+<span class="sd">          calculator = ImpactCalculator()</span>
+<span class="sd">          myRoot = os.path.dirname(__file__)</span>
+<span class="sd">          vectorPath = os.path.join(myRoot, &#39;testdata&#39;,</span>
+<span class="sd">                                     &#39;Jakarta_sekolah.shp&#39;)</span>
+<span class="sd">          rasterPath = os.path.join(myRoot, &#39;testdata&#39;,</span>
+<span class="sd">                                    &#39;current_flood_depth_jakarta.asc&#39;)</span>
+<span class="sd">          calculator.setHazardLayer(self.rasterPath)</span>
+<span class="sd">          calculator.setExposureLayer(self.vectorPath)</span>
+<span class="sd">          calculator.setFunction(&#39;Flood Building Impact Function&#39;)</span>
+<span class="sd">          myRunner = calculator.getRunner()</span>
+<span class="sd">          #wait till completion</span>
+<span class="sd">          myRunner.join()</span>
+<span class="sd">          myResult = myRunner.result()</span>
+<span class="sd">          myFilename = myRunner.filename()</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">           None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">           None</span>
+<span class="sd">        Raises:</span>
+<span class="sd">           None</span>
+<span class="sd">           set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">myLayers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_hazardLayer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposureLayer</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">calculate_impact</span><span class="p">(</span><span class="n">layers</span><span class="o">=</span><span class="n">myLayers</span><span class="p">,</span>
+                                      <span class="n">impact_fcn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_function</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="s">&#39;Error encountered:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="s">&#39;Completed successfully&#39;</span>
+        <span class="c">#  let any listending slots know we are done</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_notifier</span><span class="o">.</span><span class="n">done</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Frequently Asked Questions &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>Frequently Asked Questions</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<p>How do I rename a shape file and all the helper files?</p>
+<div class="highlight-python"><pre>Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ].
+For example
+  rename -v 's/^building/OSM_building_polygons_20110905/' building.*</pre>
+</div>
+<p>How do I reproject a spatial data file to WGS84 geographic coordinates</p>
+<div class="highlight-python"><pre>For raster data, use gdalwarp, for example
+gdalwarp -t_srs EPSG:4326 &lt;source&gt;.tif &lt;target&gt;.tif
+
+For vector data use ogr2ogr. For example from TM-3 zone 48.2
+ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 &lt;target&gt;.shp &lt;source&gt;.shp</pre>
+</div>
+<p>How do I get Open Street Map building data into Risk in a Box?</p>
+<div class="highlight-python"><pre>For Indonesia, you can download latest collections at http://data.kompetisiosm.org
+
+or you can add our Open Street Map building PostGIS mirror to riab::
+
+* Add PostGIS layer with host=203.77.224.77, database=osm, username=aifdr, port 5432, SSL mode=disable
+* Select table planet_osm_polygon
+* Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''</pre>
+</div>
+<p>How do I take screen capture e.g. for use in a presentation?</p>
+<div class="highlight-python"><pre>On Ubuntu, get the packages gtk-recordmydesktop and mencoder
+Record using recordmydesktop (start and stop icon in the top bar)
+Convert to other formats using mencoder, e.g.
+mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=mpeg4:vpass=1 -of lavf -o yogya_analysis.avi
+or
+mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=wmv2 -of lavf -o yogya_analysis.wmv</pre>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2012, Ole Moller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

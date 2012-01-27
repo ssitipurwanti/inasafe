@@ -27,7 +27,7 @@ docs: compile
 	cd docs; make html; cd ..
 
 clean:
-	# FIXME (Ole): Use normal Makefile rules instead
+	@# FIXME (Ole): Use normal Makefile rules instead
 	@find . -name '*~' -exec rm {} \;
 	@find . -name '*.pyc' -exec rm {} \;
 
@@ -46,25 +46,48 @@ pep8:
 	@echo "-----------"
 	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
 
-# Run test suite only
-test_suite: compile testdata
+# Run unit test suite only - this is for tests that are relatively quick
+unittests: compile testdata
 	@echo
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+
+	@# Preceding dash means that make will continue in case of errors
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions engine,storage,gui,impact_functions
+
+# Run system test suite only - this is for tests that take long to complete
+systemtests: compile testdata
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Unit Test Suite"
+	@echo "----------------------"
+
+	@# Preceding dash means that make will continue in case of errors
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=system_tests system_tests
+
+# Run all tests (need to do entire call again to get coverage!)
+test: unittests systemtests
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Unit Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
 	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
 
-# Run test suite only
+
+
+# Run GUI tests only
 gui_test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regresssion System Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
 	@-export PYTHONPATH=`pwd`:/usr/local/share/qgis/python/; export QGISPATH=/usr/local; nosetests -v --with-id --with-coverage --cover-package=gui gui
+
 
 # Get test data
 testdata:

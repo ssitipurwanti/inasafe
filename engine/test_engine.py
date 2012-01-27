@@ -454,69 +454,6 @@ class Test_Engine(unittest.TestCase):
             #print 'Extrema', mmi_filename, min_damage, max_damage
             #print len(MMI)
 
-    def test_earthquake_impact_OSM_data(self):
-        """Earthquake layer interpolation to OSM building data works
-
-        The impact function used is based on the guidelines plugin
-
-        This test also exercises interpolation of hazard level (raster) to
-        building locations (vector data).
-        """
-
-        # FIXME: Still needs some reference data to compare to
-        for mmi_filename in ['Shakemap_Padang_2009.asc',
-                             # Time consuming
-                             #'Earthquake_Ground_Shaking.asc',
-                             'Lembang_Earthquake_Scenario.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
-            exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                                 % TESTDATA)
-
-            # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
-
-            plugin_name = 'Earthquake Guidelines Function'
-            plugin_list = get_plugins(plugin_name)
-            assert len(plugin_list) == 1
-            assert plugin_list[0].keys()[0] == plugin_name
-
-            IF = plugin_list[0][plugin_name]
-            impact_vector = calculate_impact(layers=[H, E],
-                                             impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
-
-            # Read input data
-            hazard_raster = read_layer(hazard_filename)
-            A = hazard_raster.get_data()
-            mmi_min, mmi_max = hazard_raster.get_extrema()
-
-            exposure_vector = read_layer(exposure_filename)
-            coordinates = exposure_vector.get_geometry()
-            attributes = exposure_vector.get_data()
-
-            # Extract calculated result
-            icoordinates = impact_vector.get_geometry()
-            iattributes = impact_vector.get_data()
-
-            # Verify interpolated MMI with test result
-            for i in range(len(iattributes)):
-                calculated_mmi = iattributes[i]['MMI']
-
-                if numpy.isnan(calculated_mmi):
-                    continue
-
-                # Check that interpolated points are within range
-                msg = ('Interpolated mmi %f from file %s was outside '
-                       'extrema: [%f, %f] at point %i '
-                       % (calculated_mmi, hazard_filename,
-                          mmi_min, mmi_max, i))
-                assert mmi_min <= calculated_mmi <= mmi_max, msg
-
-                calculated_dam = iattributes[i]['DMGLEVEL']
-                assert calculated_dam in [1, 2, 3]
 
     def test_tsunami_loss_use_case(self):
         """Building loss from tsunami use case works

@@ -333,7 +333,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         for mmi_filename in ['test/lembang_mmi_hazmap.asc',
-                             'test/Earthquake_Ground_Shaking_clip.tif',  # NaN's
+                             'test/Earthquake_Ground_Shaking_clip.tif',  # NaN
                              'hazard/Lembang_Earthquake_Scenario.asc']:
 
             # Name file names for hazard level and exposure

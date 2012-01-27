@@ -908,7 +908,6 @@ class Test_IO(unittest.TestCase):
                    % (str(bbox), filename, str(ref_bbox[key])))
             assert numpy.allclose(bbox, ref_bbox[key]), msg
 
-
             # Check the conversions
             bbox_string = bboxlist2string(bbox)
 

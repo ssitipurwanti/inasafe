@@ -24,6 +24,7 @@ from gui.impactcalculator import ImpactCalculator
 from gui.riabexceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
+from storage.utilities_test import TESTDATA
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -34,19 +35,21 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.calculator = ImpactCalculator()
         myRoot = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..'))
-        self.vectorPath = os.path.join(myRoot, 'riab_test_data',
+        self.vectorPath = os.path.join(myRoot, TESTDATA, 'exposure',
                                        'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
+        self.rasterShakePath = os.path.join(myRoot, TESTDATA, 'hazard',
                                        'Shakemap_Padang_2009.asc')
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
-        self.rasterTsunamiBBPath = os.path.join(myRoot,
-                                                'riab_test_data', fn)
-        self.rasterExposureBBPath = os.path.join(myRoot, 'riab_test_data',
+        self.rasterTsunamiBBPath = os.path.join(myRoot, TESTDATA,
+                                                'hazard', fn)
+        self.rasterExposureBBPath = os.path.join(myRoot, TESTDATA,
+                                                 'exposure',
                                                 'tsunami_exposure_BB.shp')
 
-        self.rasterPopulationPath = os.path.join(myRoot, 'riab_test_data',
+        self.rasterPopulationPath = os.path.join(myRoot, TESTDATA,
+                                                 'exposure',
                                                  'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
@@ -197,8 +200,8 @@ class ImpactCalculatorTest(unittest.TestCase):
                               'subcategory': 'tsunami', 'unit': 'm'}
         myKeywords = self.calculator.getKeywordFromFile(
             self.rasterExposureBBPath)
-        print myKeywords == {'category': 'exposure',
-                             'subcategory': 'building'}
+        assert myKeywords == {'category': 'exposure',
+                              'subcategory': 'building'}
 
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector

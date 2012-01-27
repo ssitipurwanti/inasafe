@@ -10,13 +10,9 @@ import numpy
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Location of test data
-TESTDATANAME = 'riab_test_data'
+TESTDATANAME = 'riab_data'
 TESTREPO = 'http://www.aifdr.org/svn/%s' % TESTDATANAME
 TESTDATA = os.path.join(pardir, TESTDATANAME)
-
-DEMODATANAME = 'riab_demo_data'
-DEMOREPO = 'http://www.aifdr.org/svn/%s' % DEMODATANAME
-DEMODATA = os.path.join(pardir, DEMODATANAME)
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'lembang_schools.shp': 144,

@@ -30,16 +30,17 @@ from qgis.core import (QgsApplication,
 from riabclipper import clipLayer, getBestResolution, reprojectLayer
 from impactcalculator import getOptimalExtent
 from utilities_test import get_qgis_test_app
+from storage.utilities_test import TESTDATA
 
 # Setup pathnames for test data sets
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
 
-vectorPath = os.path.join(myRoot, 'riab_test_data',
+vectorPath = os.path.join(myRoot, TESTDATA, 'exposure',
                           'Padang_WGS84.shp')
-rasterPath = os.path.join(myRoot, 'riab_test_data',
+rasterPath = os.path.join(myRoot, TESTDATA, 'hazard',
                           'Shakemap_Padang_2009.asc')
-rasterPath2 = os.path.join(myRoot, 'riab_test_data',
+rasterPath2 = os.path.join(myRoot, TESTDATA, 'test',
                            'population_padang_1.asc')
 
 # Handle to common QGis test app

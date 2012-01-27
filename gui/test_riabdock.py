@@ -31,6 +31,7 @@ from qgis.core import (QgsApplication,
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from utilities_test import get_qgis_test_app
+from storage.utilities_test import TESTDATA
 from gui.riabdock import RiabDock
 
 # Get QGis app handle
@@ -93,19 +94,20 @@ def loadLayers():
     # FIXME (Ole): Write as a for loop as in the tests in engine
 
     myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    myData = os.path.join(myRoot, 'riab_test_data')
+    myData = os.path.join(myRoot, TESTDATA)
 
     # List all layers in the correct order.
-    myFileList = ['Padang_WGS84.shp',
-                  'glp10ag.asc',
-                  'Shakemap_Padang_2009.asc',
-                  'tsunami_max_inundation_depth_BB_utm.asc',
-                  'tsunami_exposure_BB.shp']
+    myFileList = ['exposure/Padang_WGS84.shp',
+                  'exposure/glp10ag.asc',
+                  'hazard/Shakemap_Padang_2009.asc',
+                  'hazard/tsunami_max_inundation_depth_BB_utm.asc',
+                  'exposure/tsunami_exposure_BB.shp']
 
     myCanvasLayers = []
     for myFile in myFileList:
         # Extract basename and absolute path
         myBaseName, myExt = os.path.splitext(myFile)
+        myBaseName = myBaseName.split('/')[1]
         myPath = os.path.join(myData, myFile)
 
         # Create QGis Layer Instance
@@ -192,10 +194,11 @@ class RiabDockTest(unittest.TestCase):
         D = getUiState(form.ui)
 
         #print D
+        msg = 'Got wrong dictionary: %s' % D
         assert D == {'Hazard': 'Shakemap_Padang_2009',
                      'Exposure': 'Padang_WGS84',
                      'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}
+                     'Run Button Enabled': True}, msg
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
@@ -266,11 +269,11 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
-
+        msg = 'Got wrong dictionary: %s' % D
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Tsunami Building Impact Function',
                      'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                     'Exposure': 'tsunami_exposure_BB'}
+                     'Exposure': 'tsunami_exposure_BB'}, msg
 
         # Enable on-the-fly reprojection
         canvas.mapRenderer().setProjectionsEnabled(True)

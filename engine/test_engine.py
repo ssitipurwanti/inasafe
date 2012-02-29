@@ -1788,7 +1788,6 @@ class Test_Engine(unittest.TestCase):
         # FIXME (Ole): Work in progress
         return
 
-
         msg = ('Expected 59 points tagged with category, '
                'but got only %i' % count)
         assert count == 59, msg
@@ -1819,7 +1818,6 @@ class Test_Engine(unittest.TestCase):
         msg = 'Affected and not affected does not add up'
         assert (counts[DEFAULT_ATTRIBUTE] +
                 counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
-
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception

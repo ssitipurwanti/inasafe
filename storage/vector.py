@@ -813,6 +813,8 @@ class Vector:
 
             # Clip line lines to polygons
             for i, polygon in enumerate(polygons):
+                #print ('Doing %i lines with polygon %i of %i [%i]'
+                #       % (len(lines), i, len(polygons), len(polygon)))
                 for j, line in enumerate(lines):
                     inside, outside = clip_line_by_polygon(line, polygon)
 

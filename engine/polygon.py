@@ -721,13 +721,6 @@ def clip_line_by_polygon(line, polygon,
                 edge = [polygon[i, :], polygon[j, :]]
 
                 status, value = intersection(segment, edge)
-                if status == 2:
-                    # Collinear overlapping lines found
-                    # Use midpoint of common segment
-                    # FIXME (Ole): Maybe better to use
-                    #              common segment directly
-                    value = (value[0] + value[1]) / 2
-
                 if value is not None:
                     # Record intersection point found
                     intersections.append(value)
@@ -911,8 +904,8 @@ def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
 def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     """Returns intersecting point between two line segments.
 
-    However, if parallel lines coincide partly (i.e. share a common segment),
-    the line segment where lines coincide is returned
+    If lines are parallel or coincide partly (i.e. share a common segment),
+    they are considered to not intersect
 
     Inputs:
         line0, line1: Each defined by two end points as in:
@@ -923,13 +916,8 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
 
     Output:
         status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
+        status == 0: no intersection (or parallel or collinear), value set to None.
         status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines.
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -941,37 +929,28 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     x2, y2 = line1[0, :]
     x3, y3 = line1[1, :]
 
-    denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
-    u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
-    u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
+    y3y2 = y3 - y2
+    x3x2 = x3 - x2
+    x1x0 = x1 - x0
+    y1y0 = y1 - y0
+    denom = y3y2 * x1x0 - x3x2 * y1y0
 
     if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
-        # Lines are parallel - check if they are collinear
-        if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
-            # We now know that the lines are collinear
-            state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
-                     point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
-                     point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
-                     point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
-
-            return collinearmap[state]([x0, y0], [x1, y1],
-                                       [x2, y2], [x3, y3])
-        else:
-            # Lines are parallel but aren't collinear
-            return 4, None  # FIXME (Ole): Add distance here instead of None
+        # Lines are parallel or collinear
+        return 2, None
     else:
         # Lines are not parallel, check if they intersect
+        x2x0 = x2 - x0
+        y2y0 = y2 - y0
+
+        u0 = x3x2 * (y0 - y2) - y3y2 * (x0 - x2)
+        u1 = x2x0 * y1y0 - y2y0 * x1x0
+
         u0 = u0 / denom
         u1 = u1 / denom
 
-        x = x0 + u0 * (x1 - x0)
-        y = y0 + u0 * (y1 - y0)
-
-        # Sanity check - can be removed to speed up if needed
-        if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
-            raise Exception
-        if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
-            raise Exception
+        x = x0 + u0 * x1x0
+        y = y0 + u0 * y1y0
 
         # Check if point found lies within given line segments
         if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
@@ -981,62 +960,3 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
             # No intersection
             return 0, None
 
-
-# Result functions used in intersection() below for possible states
-# of collinear lines
-# (p0,p1) defines line 0, (p2,p3) defines line 1.
-
-def lines_dont_coincide(p0, p1, p2, p3):
-    return 3, None
-
-
-def lines_0_fully_included_in_1(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p1])
-
-
-def lines_1_fully_included_in_0(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p3])
-
-
-def lines_overlap_same_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p3])
-
-
-def lines_overlap_same_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p1])
-
-
-def lines_overlap_opposite_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p2])
-
-
-def lines_overlap_opposite_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p3, p1])
-
-
-# This function called when an impossible state is found
-def lines_error(p1, p2, p3, p4):
-    msg = ('Impossible state: p1=%s, p2=%s, p3=%s, p4=%s'
-           % (str(p1), str(p2), str(p3), str(p4)))
-    raise RuntimeError(msg)
-
-# Mapping to possible states for line intersection
-#
-#                 0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1,
-#                                                   1 starts 0, 1 ends 0
-collinearmap = {(False, False, False, False): lines_dont_coincide,
-                (False, False, False, True): lines_error,
-                (False, False, True, False): lines_error,
-                (False, False, True, True): lines_1_fully_included_in_0,
-                (False, True, False, False): lines_error,
-                (False, True, False, True): lines_overlap_opposite_direction2,
-                (False, True, True, False): lines_overlap_same_direction2,
-                (False, True, True, True): lines_1_fully_included_in_0,
-                (True, False, False, False): lines_error,
-                (True, False, False, True): lines_overlap_same_direction,
-                (True, False, True, False): lines_overlap_opposite_direction,
-                (True, False, True, True): lines_1_fully_included_in_0,
-                (True, True, False, False): lines_0_fully_included_in_1,
-                (True, True, False, True): lines_0_fully_included_in_1,
-                (True, True, True, False): lines_0_fully_included_in_1,
-                (True, True, True, True): lines_0_fully_included_in_1}

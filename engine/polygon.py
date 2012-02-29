@@ -874,19 +874,26 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 #------------------------------------
 # Functionality for line intersection
 #------------------------------------
-def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
+def multiple_intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     """Returns intersecting points between multiple line segments.
 
     Note, if parallel lines coincide partly (i.e. share a common segment),
     the midpoint of the segment where lines coincide is returned
 
     Inputs:
-        lines:  Each defined by two end points as in:
-                      [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
+        line0, line1:  Each line is defined by two end points:
+                       [[x0, y0], [x1, y1]]
+
+                       Lines can also be vectorised following the format
+                       line[0,0,:] = x0
+                       line[0,1,:] = y0
+                       line[1,0,:] = x1
+                       line[1,1,:] = y1
+
 
     Output:
+       intersections: Nx2 array with intersection points or nan (in case of no intersection)
+
     """
 
     pass
@@ -932,7 +939,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         x2x0 = x2 - x0
         y2y0 = y2 - y0
 
-        u0 = x3x2 * (y0 - y2) - y3y2 * (x0 - x2)
+        u0 = y3y2 * x2x0 - x3x2 * y2y0
         u1 = x2x0 * y1y0 - y2y0 * x1x0
 
         u0 = u0 / denom

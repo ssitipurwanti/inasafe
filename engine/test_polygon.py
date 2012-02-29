@@ -934,6 +934,33 @@ class Test_Polygon(unittest.TestCase):
         value = intersection(line0, line1)
         assert value is None
 
+    def test_vectorised_intersection(self):
+        """Vectorised intersection of multiple lines works
+        """
+
+        # First vectorise only one of the line arguments
+        line0 = [[0, 0], [100, 100]]
+
+        N = 10
+        line1 = numpy.zeros(40, numpy.float).reshape(2,2,N)
+        x0 = numpy.arange(N)*10
+        y0 = numpy.zeros(N)
+        x1 = numpy.arange(N)*10
+        y1 = numpy.ones(N)*100
+        line1[0,0,:] = x0
+        line1[0,1,:] = y0
+        line1[1,0,:] = x1
+        line1[1,1,:] = y1
+
+        value = intersection(line0, line1)
+        assert len(value.shape) == 2
+        assert value.shape[0] == N
+        assert value.shape[1] == 2
+
+        print value
+
+
+
     def test_clip_line_by_polygon_simple(self):
         """Simple lines are clipped and classified by polygon
         """
@@ -1262,6 +1289,6 @@ class Test_Polygon(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test')
+    suite = unittest.makeSuite(Test_Polygon, 'test_vectorised')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

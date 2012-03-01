@@ -953,6 +953,8 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
 
     # Determine lines are parallel (or collinear) up to a tolerance
     N = line1.shape[2]
+    ok = numpy.zeros(N, dtype=numpy.bool)  # All False
+    ok[numpy.abs(denominator) > atol] = True          # True if not parallel
 
     # Intersection formula
     x2x0 = x2 - x0
@@ -961,14 +963,9 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     u0 = y3y2 * x2x0 - x3x2 * y2y0
     u1 = x2x0 * y1y0 - y2y0 * x1x0
 
-    # Suppress numpy warnings (as we'll be dividing by zero)
-    original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
-
-    u0 = u0 / denominator
-    u1 = u1 / denominator
-
-    # Restore numpy warnings
-    numpy.seterr(**original_numpy_settings)
+    u0[ok] = u0[ok] / denominator[ok]
+    u1[ok] = u1[ok] / denominator[ok]
+    u0[-ok] = u1[-ok] = numpy.nan
 
     x = x0 + u0 * x1x0
     y = y0 + u0 * y1y0

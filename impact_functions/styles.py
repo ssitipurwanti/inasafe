@@ -15,6 +15,8 @@ return R
 
 """
 
+from storage.utilities import ugettext as _
+
 # Flood population impact raster style
 style_classes = [dict(label=_('Low'), colour='#38A800', quantity=2, transparency=100),
                  dict(colour='#38A800', quantity=5, transparency=0),

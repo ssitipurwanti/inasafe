@@ -917,6 +917,7 @@ class Test_Polygon(unittest.TestCase):
 
         value = intersection(line0, line1)
         assert value is None
+        #assert numpy.all(numpy.isnan(value))
 
     def test_intersection_parallel(self):
         """Parallel lines are correctly detected in intersection code
@@ -927,39 +928,80 @@ class Test_Polygon(unittest.TestCase):
 
         value = intersection(line0, line1)
         assert value is None
+        #assert numpy.all(numpy.isnan(value))
 
         line0 = [[0, 0], [10, 100]]
         line1 = [[-10, 5], [0, 105]]
 
         value = intersection(line0, line1)
         assert value is None
+        #assert numpy.all(numpy.isnan(value))
 
-    def test_vectorised_intersection(self):
-        """Vectorised intersection of multiple lines works
+    def test_vectorised_intersection1(self):
+        """Vectorised intersection of multiple lines works 1
         """
 
-        # First vectorise only one of the line arguments
+        line0 = [[0, 0], [24, 12]]
+
+        # One way of building the array
+        line1 = numpy.zeros(16).reshape(2,2,4)  # Three lines
+        line1[0, 0, :] = [0, 24, 0, 15]   # x0
+        line1[0, 1, :] = [12, 0, 24, 0]   # y0
+        line1[1, 0, :] = [24, 0, 0, 5]    # x1
+        line1[1, 1, :] = [0, 12, 12, 15]  # y1
+
+        value = intersection(line0, line1)
+        mask = - numpy.isnan(value[:, 0])
+        v = value[mask]
+        assert numpy.allclose(v,
+                              [[12.0, 6.0],
+                               [12.0, 6.0],
+                               [11.25, 5.625]])
+
+
+        # A more direct way of building the array
+        line1 = [[[0, 24, 0, 15],    # x0
+                  [12, 0, 24, 0]],   # y0
+                 [[24, 0, 0, 5],     # x1
+                  [0, 12, 12, 15]]]  # y1
+
+        value = intersection(line0, line1)
+        mask = - numpy.isnan(value[:, 0])
+        v = value[mask]
+        assert numpy.allclose(v,
+                              [[12.0, 6.0],
+                               [12.0, 6.0],
+                               [11.25, 5.625]])
+
+    def test_vectorised_intersection2(self):
+        """Vectorised intersection of multiple lines works 2
+        """
+
+        # Common line segment to intersect with
         line0 = [[0, 0], [100, 100]]
 
-        N = 10
-        line1 = numpy.zeros(40, numpy.float).reshape(2,2,N)
-        x0 = numpy.arange(N)*10
+        # Vectorised collection of line arguments
+        N = 15  # Line 0 to 10 will intersect, 11 - 14 won't
+        line1 = numpy.zeros(4 * N, numpy.float).reshape(2, 2, N)
+        x0 = numpy.arange(N) * 10
         y0 = numpy.zeros(N)
-        x1 = numpy.arange(N)*10
-        y1 = numpy.ones(N)*100
-        line1[0,0,:] = x0
-        line1[0,1,:] = y0
-        line1[1,0,:] = x1
-        line1[1,1,:] = y1
+        x1 = numpy.arange(N) * 10
+        y1 = numpy.ones(N) * 100
+        line1[0, 0, :] = x0
+        line1[0, 1, :] = y0
+        line1[1, 0, :] = x1
+        line1[1, 1, :] = y1
 
         value = intersection(line0, line1)
         assert len(value.shape) == 2
         assert value.shape[0] == N
         assert value.shape[1] == 2
 
-        print value
+        for i in range(0, 11):
+            assert value[i, 0] == i * 10
 
-
+        for i in range(11, 15):
+            assert numpy.all(numpy.isnan(value[i]))
 
     def test_clip_line_by_polygon_simple(self):
         """Simple lines are clipped and classified by polygon
@@ -1289,6 +1331,7 @@ class Test_Polygon(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test_vectorised')
+    #suite = unittest.makeSuite(Test_Polygon, 'test_vectorised_intersection')
+    suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

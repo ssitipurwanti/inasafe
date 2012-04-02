@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_options_dialog_base.ui'
 #
-# Created: Mon Apr  2 09:10:24 2012
+# Created: Mon Apr  2 09:54:28 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,7 +33,7 @@ class Ui_ISOptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -8, 453, 433))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -8, 442, 433))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -43,7 +43,7 @@ class Ui_ISOptionsDialogBase(object):
         self.cbxSetLayerNameFromTitle.setObjectName(_fromUtf8("cbxSetLayerNameFromTitle"))
         self.gridLayout_2.addWidget(self.cbxSetLayerNameFromTitle, 2, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 5, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 6, 0, 1, 1)
         self.cbxVisibleLayersOnly = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxVisibleLayersOnly.setObjectName(_fromUtf8("cbxVisibleLayersOnly"))
@@ -51,17 +51,12 @@ class Ui_ISOptionsDialogBase(object):
         self.cbxUseThread = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxUseThread.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxUseThread.setObjectName(_fromUtf8("cbxUseThread"))
-        self.gridLayout_2.addWidget(self.cbxUseThread, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxUseThread, 5, 0, 1, 1)
         self.grpNotImplemented = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         self.grpNotImplemented.setTitle(QtGui.QApplication.translate("ISOptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
         self.grpNotImplemented.setObjectName(_fromUtf8("grpNotImplemented"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpNotImplemented)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.cbxBubbleLayersUp = QtGui.QCheckBox(self.grpNotImplemented)
-        self.cbxBubbleLayersUp.setEnabled(True)
-        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxBubbleLayersUp.setObjectName(_fromUtf8("cbxBubbleLayersUp"))
-        self.gridLayout_3.addWidget(self.cbxBubbleLayersUp, 0, 0, 1, 1)
         self.label = QtGui.QLabel(self.grpNotImplemented)
         self.label.setEnabled(True)
         self.label.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
@@ -142,7 +137,12 @@ class Ui_ISOptionsDialogBase(object):
         self.spinBox.setObjectName(_fromUtf8("spinBox"))
         self.horizontalLayout_5.addWidget(self.spinBox)
         self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.grpNotImplemented, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.grpNotImplemented, 4, 0, 1, 1)
+        self.cbxBubbleLayersUp = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxBubbleLayersUp.setEnabled(True)
+        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxBubbleLayersUp.setObjectName(_fromUtf8("cbxBubbleLayersUp"))
+        self.gridLayout_2.addWidget(self.cbxBubbleLayersUp, 3, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 

@@ -507,8 +507,14 @@ def clip_lines_by_polygon(lines, polygon,
        check_input: Allows faster execution if set to False
 
     Outputs
-       inside_line_segments: Clipped line segments that are inside polygon
-       outside_line_segments: Clipped line segments that are outside polygon
+       inside_lines: Dictionary of lines that are inside polygon
+       outside_lines: Dictionary of lines that are outside polygon
+
+       Elements in output dictionaries can be multiple lines.
+
+       Both output dictionaries use the indices of the original line as keys.
+       This makes it possible to track which line the new clipped lines come from,
+       if one e.g. wants to assign the original attribute values to clipped lines.
 
     This is a wrapper around clip_line_by_polygon
     """
@@ -526,6 +532,10 @@ def clip_lines_by_polygon(lines, polygon,
                 msg = ('Line could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
+
+            msg = 'Lines must be 2d array of vertices'
+            if not len(lines[i].shape) == 2:
+                raise RuntimeError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
@@ -551,8 +561,8 @@ def clip_lines_by_polygon(lines, polygon,
     N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
-    inside_line_segments = []
-    outside_line_segments = []
+    inside_line_segments = {}
+    outside_line_segments = {}
 
     # Get polygon extents to quickly rule out lines where all segments
     # are outside and on the same side of its bounding box
@@ -565,24 +575,37 @@ def clip_lines_by_polygon(lines, polygon,
     for k in range(M):
         line = lines[k]
 
+        # FIXME: ------------------------------------------------
         # Optimisation (will depend on how many lines are outside)
         # In test_engine.py
         # Multiple lines are clipped correctly by complex polygon ... ok
-        # Ran 1 test in 12.517s
-        # Ran 1 test in 11.474s
-        if (max(line[:, 0]) < minpx or  # Everything is to the left
-            min(line[:, 0]) > maxpx or  # Everything is to the right
-            max(line[:, 1]) < minpy or  # Everything is to the south
-            min(line[:, 1]) > maxpy):   # Everything is to the north
-
-            outside_line_segments.append(line)
-            continue
+        # Ran 1 test in 12.227s
+        # Ran 1 test in 10.646s
+        #if (max(line[:, 0]) < minpx or  # Everything is to the left
+        #    min(line[:, 0]) > maxpx or  # Everything is to the right
+        #    max(line[:, 1]) < minpy or  # Everything is to the south
+        #    min(line[:, 1]) > maxpy):   # Everything is to the north
+        #
+        #    outside_line_segments[k] = [line]
+        #    continue
 
         inside, outside = clip_line_by_polygon(line, polygon,
                                                closed=closed,
                                                check_input=check_input)
-        inside_line_segments += inside
-        outside_line_segments += outside
+
+        # FIXME: Self check - can remove to save time
+        assert type(inside) == type([])
+        for line in inside:
+            assert len(line.shape) == 2
+            assert line.shape[0] >= 2
+            assert line.shape[1] == 2
+        for line in outside:
+            assert len(line.shape) == 2
+            assert line.shape[0] >= 2
+            assert line.shape[1] == 2
+
+        inside_line_segments[k] = inside
+        outside_line_segments[k] = outside
 
     return inside_line_segments, outside_line_segments
 
@@ -808,38 +831,37 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
 
     line = segments[0]
     for i in range(len(segments) - 1):
-
-        #flag = False
-        #segment = segments[i]
-        #if (numpy.allclose(segment[0], [122.231108, -8.626598]) or
-        #    numpy.allclose(segment[0], [122.231021, -8.626557]) or
-        #    numpy.allclose(segment[1], [122.231108, -8.626598]) or
-        #    numpy.allclose(segment[1], [122.231021, -8.626557])):
-        #    print
-        #    print 'Found ', i, segment, segments[i + 1]
-        #    flag = True
-        #else:
-        #    flag = False
-
-        # Not joined are
-        #[[122.231108, -8.626598], [122.231021, -8.626557]]
-        #[[122.231021, -8.626557], [122.230284, -8.625983]]
-
         if numpy.allclose(segments[i][1], segments[i + 1][0],
                           rtol=rtol, atol=atol):
             # Segments are adjacent
             line.append(segments[i + 1][1])
         else:
             # Segments are disjoint - current line finishes here
-            lines.append(line)
+            lines.append(numpy.array(line))
             line = segments[i + 1]
 
     # Finish
-    lines.append(line)
+    lines.append(numpy.array(line))
 
     # Return
     return lines
 
+
+def line_dictionary_to_geometry(D):
+    """Convert dictionary of lines to list of Nx2 arrays
+
+    Input
+        D: Dictionary of lines e.g. as produced by clip_lines_by_polygon
+
+    Output:
+        List of Nx2 arrays suitable as geometry input to class Vector
+    """
+
+    lines = []
+    for key in D:
+        lines += D[key]
+
+    return lines
 
 #--------------------------------------------------
 # Helper function to generate points inside polygon

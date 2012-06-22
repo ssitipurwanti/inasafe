@@ -6,7 +6,7 @@ import numpy
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from common.polygon import inside_polygon, clip_line_by_polygon
+from common.polygon import inside_polygon, clip_line_by_polygon, clip_lines_by_polygon
 from common.numerics import ensure_numeric
 from common.utilities import verify
 from common.dynamic_translations import names as internationalised_titles
@@ -799,35 +799,68 @@ class Vector(Layer):
 
             # Clip line lines to polygons
             for i, polygon in enumerate(polygons):
-                for j, line in enumerate(lines):
-                    inside, outside = clip_line_by_polygon(line, polygon)
+                print 'Poly %i of %i for %i lines' % (i, len(polygons), len(lines))
 
-                    # Create new attributes
-                    # FIXME (Ole): Not done single specified polygon
-                    #              attribute
-                    inside_attributes = {}
-                    outside_attributes = {}
-                    for key in line_attributes[j]:
-                        inside_attributes[key] = line_attributes[j][key]
-                        outside_attributes[key] = line_attributes[j][key]
+                inside, outside = clip_lines_by_polygon(lines, polygon, check_input=True)
 
-                    for key in poly_attributes[i]:
-                        inside_attributes[key] = poly_attributes[i][key]
-                        outside_attributes[key] = None
+                count = 0
+                # For all original lines
+                for j in range(N):
 
-                    # Always create default attribute flagging if segment was
-                    # inside any of the polygons
-                    inside_attributes[DEFAULT_ATTRIBUTE] = True
-                    outside_attributes[DEFAULT_ATTRIBUTE] = False
+                    if j in inside:
+                        # For all clipped lines inside polygon
+                        # originating from line j
+                        for line in inside[j]:
+                            print count, j, len(line), type(line), 'in'
 
-                    # Assign new attribute set to clipped lines
-                    for segment in inside:
-                        clipped_geometry.append(segment)
-                        clipped_attributes.append(inside_attributes)
+                            # Create attribute dictionary for this line feature
+                            attributes = {}
 
-                    for segment in outside:
-                        clipped_geometry.append(segment)
-                        clipped_attributes.append(outside_attributes)
+                            # Assign original line attributes to clipped lines
+                            for key in line_attributes[j]:
+                                attributes[key] = line_attributes[j][key]
+
+                            # Assign polygon attributes
+                            for key in poly_attributes[i]:
+                                attributes[key] = poly_attributes[i][key]
+
+                            # Always create default attribute flagging if segment was
+                            # inside any of the polygons
+                            attributes[DEFAULT_ATTRIBUTE] = True
+
+                            count += 1
+                            clipped_geometry.append(line)
+                            clipped_attributes.append(attributes)
+
+                    elif j in outside:
+                        # For all clipped lines outside polygon
+                        # originating from line j
+                        for line in outside[j]:
+                            print count, j, len(line), type(line), 'out'
+
+                            # Create attribute dictionary for this line feature
+                            attributes = {}
+
+                            # Assign original line attributes to clipped lines
+                            for key in line_attributes[j]:
+                                attributes[key] = line_attributes[j][key]
+
+                            # Create polygon attributes with None value
+                            for key in poly_attributes[i]:
+                                attributes[key] = None
+
+                            # Always create default attribute flagging if segment was
+                            # inside any of the polygons
+                            attributes[DEFAULT_ATTRIBUTE] = False
+
+                            count += 1
+                            clipped_geometry.append(line)
+                            clipped_attributes.append(attributes)
+
+                    else:
+                        msg = 'Original line %i was not found in clipped lines ' % j
+                        raise Exception(msg)
+
 
             # Create new Vector instance and return
             V = Vector(data=clipped_attributes,

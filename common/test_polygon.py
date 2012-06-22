@@ -1853,43 +1853,87 @@ class Test_Polygon(unittest.TestCase):
                  [[0.5, 0.5], [0.5, 2]]]
 
         inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(lines, polygon)
+            clip_lines_by_polygon(lines, polygon, check_input=True)
 
-        assert numpy.allclose(inside_line_segments,
-                              [[[0, 0.5], [0.5, 0.5]],
-                               [[0.5, 0.5], [0.5, 1]]])
+        assert numpy.allclose(inside_line_segments[0], [[0, 0.5], [0.5, 0.5]])
+        assert numpy.allclose(inside_line_segments[1], [[0.5, 0.5], [0.5, 1]])
 
-        assert numpy.allclose(outside_line_segments,
-                              [[[-1, 0.5], [0, 0.5]],
-                               [[0.5, 1], [0.5, 2]]])
+        assert numpy.allclose(outside_line_segments[0], [[-1, 0.5], [0, 0.5]])
+        assert numpy.allclose(outside_line_segments[1], [[0.5, 1], [0.5, 2]])
 
         # Multiple lines with different number of segments
         lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]],
                  [[-1, 0.0], [1, 2.0 / 3]]]
 
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(lines, polygon)
+        inside_lines, outside_lines = \
+            clip_lines_by_polygon(lines, polygon, check_input=True)
 
-        assert numpy.allclose(inside_line_segments[0],
+        #print
+        #print inside_lines
+        #print
+        #print outside_lines
+
+        # Check that output has the right dimensions and types
+        assert len(inside_lines) == 2
+        assert len(outside_lines) == 2
+
+        for key, values in inside_lines.items():
+            for line in values:
+                assert type(line) == numpy.ndarray
+                assert len(line.shape) == 2
+                assert line.shape[1] == 2
+
+        for key, values in outside_lines.items():
+            for line in values:
+                assert type(line) == numpy.ndarray
+                assert len(line.shape) == 2
+                assert line.shape[1] == 2
+
+
+        assert numpy.allclose(inside_lines[0],
+                              [[[0, 0.5], [0.5, 0.5], [0.5, 1]]])
+        assert numpy.allclose(inside_lines[1],
+                              [[[0, 1.0 / 3], [1, 2.0 / 3]]])
+
+        assert numpy.allclose(outside_lines[0],
+                              [[[-1, 0.5], [0, 0.5]],
+                               [[0.5, 1], [0.5, 2]]])  # Two lines
+        assert numpy.allclose(outside_lines[1], [[-1, 0], [0, 1.0 / 3]])
+
+        # Test that lines dictionaries convert to geometries (lists of Nx2 arrays)
+        inside_geo = line_dictionary_to_geometry(inside_lines)
+        outside_geo = line_dictionary_to_geometry(outside_lines)
+
+        for line in inside_geo + outside_geo:
+            assert type(line) == numpy.ndarray
+            assert len(line.shape) == 2
+            assert line.shape[1] == 2
+
+        assert numpy.allclose(inside_geo[0],
                               [[0, 0.5], [0.5, 0.5], [0.5, 1]])
-        assert numpy.allclose(inside_line_segments[1],
+        assert numpy.allclose(inside_geo[1],
                               [[0, 1.0 / 3], [1, 2.0 / 3]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_geo,
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]],
                                [[-1, 0], [0, 1.0 / 3]]])
+
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon
         """
 
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(test_lines, test_polygon)
+        inside_lines, outside_lines = \
+            clip_lines_by_polygon(test_lines, test_polygon, check_input=True)
+
+        # Convert dictionaries to lists of lines
+        inside_lines = line_dictionary_to_geometry(inside_lines)
+        outside_lines = line_dictionary_to_geometry(outside_lines)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) <= 33
-        assert len(outside_line_segments) <= 49
+        assert len(inside_lines) == 13
+        assert len(outside_lines) == 17
 
         # Store for visual inspection by e.g. QGis
         if False:
@@ -1897,44 +1941,46 @@ class Test_Polygon(unittest.TestCase):
                    geometry_type='polygon').write_to_file('test_polygon.shp')
             Vector(geometry=test_lines,
                    geometry_type='line').write_to_file('test_lines.shp')
-            Vector(geometry=inside_line_segments,
+            Vector(geometry=inside_lines,
                    geometry_type='line').write_to_file('inside_segments.shp')
-            Vector(geometry=outside_line_segments,
+            Vector(geometry=outside_lines,
                    geometry_type='line').write_to_file('outside_segments.shp')
 
         # Check that midpoints of each segment are correctly placed
-        for seg in inside_line_segments:
+        for seg in inside_lines:
             N = len(seg)
             for i in range(N - 1):
                 midpoint = (seg[i] + seg[i + 1]) / 2
                 assert is_inside_polygon(midpoint, test_polygon)
 
-        for seg in outside_line_segments:
+        for seg in outside_lines:
             N = len(seg)
             for i in range(N - 1):
                 midpoint = (seg[i] + seg[i + 1]) / 2
                 assert not is_inside_polygon(midpoint, test_polygon)
 
         # Characterisation test based on visually verified result
-        #print inside_line_segments, len(inside_line_segments)
-        #print outside_line_segments, len(outside_line_segments)
-        assert len(inside_line_segments) == 13
-        assert len(outside_line_segments) == 17
-        assert numpy.allclose(inside_line_segments[0],
+        #print
+        #print inside_lines, len(inside_lines)
+        #print
+        #print outside_lines, len(outside_lines)
+        assert len(inside_lines) == 13
+        assert len(outside_lines) == 17
+        assert numpy.allclose(inside_lines[0],
                               [[122.23028405, -8.62598333],
                                [122.22879, -8.624855],
                                [122.22776827, -8.62420644]])
 
-        assert numpy.allclose(inside_line_segments[-1],
+        assert numpy.allclose(inside_lines[-1],
                               [[122.247938, -8.632926],
                                [122.24793987, -8.63351817]])
 
-        assert numpy.allclose(outside_line_segments[0],
+        assert numpy.allclose(outside_lines[0],
                               [[122.231021, -8.626557],
                                [122.230563, -8.626194],
                                [122.23028405, -8.62598333]])
 
-        assert numpy.allclose(outside_line_segments[-1],
+        assert numpy.allclose(outside_lines[-1],
                               [[122.24793987, -8.63351817],
                                [122.24794, -8.63356],
                                [122.24739, -8.63622]])

@@ -24,7 +24,7 @@ from common.interpolation2d import interpolate_raster
 from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from common.numerics import nanallclose
 from common.utilities import VerificationError
-from common.testing import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 
 from impact_functions import get_plugins
 
@@ -1688,12 +1688,16 @@ class Test_Engine(unittest.TestCase):
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
+        #print
+        #for i, Ig in enumerate(I_geometry):
+        #    print i, Ig, type(Ig)
+
         I_attributes = I.get_data()
 
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:
+        if True:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('test_polygon.shp')
@@ -1714,6 +1718,111 @@ class Test_Engine(unittest.TestCase):
             msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
             assert name in I_names, msg
 
+        # Verify interpolated values with test result
+        count = 0
+        counts = {}
+        for i in range(N):
+
+            # Check that default attribute is present
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
+            # Check specific attribute
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                assert category.lower() in ['high', 'very high']
+                count += 1
+
+        msg = ('Expected 14 points tagged with category, '
+               'but got only %i' % count)
+        assert count == 14, msg
+
+        msg = 'Expected 181, got %i' % len(I_geometry)
+        assert len(I_geometry) == 181, msg
+
+        assert I_attributes[129]['Catergory'] == 'Very High'
+        assert I_attributes[135]['Catergory'] is None
+
+        # Check default attribute too
+        msg = ('Expected 14 segments tagged with default attribute '
+               '"%s = True", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+
+        msg = ('Expected 167 points tagged with default attribute '
+               '"%s = False", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
+        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
+
+        msg = 'Affected and not affected does not add up'
+        assert (counts[DEFAULT_ATTRIBUTE] +
+                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+
+    def Xtest_polygon_to_roads_interpolation_flood_example(self):
+        """Roads can be tagged with values from flood polygons
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+
+        # Read all input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute_name=None)  # Take all attributes across
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if True:
+            L = Vector(geometry=H_geometry, geometry_type='polygon',
+                       data=H_attributes)
+            L.write_to_file('flood_polygon.shp')
+
+            L = Vector(geometry=I_geometry, geometry_type='line',
+                       data=I_attributes)
+            L.write_to_file('flooded_roads.shp')
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # FIXME: HERTIL!!!!!!!!!!
+        return
         # Verify interpolated values with test result
         count = 0
         counts = {}
@@ -2161,8 +2270,11 @@ class Test_Engine(unittest.TestCase):
                 # FIXME(Ole): Hyeuk to put tests in here
 
     def test_flood_on_roads(self):
-        """Jakarta flood impact on roads calculated correctly
+        """Jakarta flood (raster) impact on roads calculated correctly
         """
+
+        # FIXME (Ole): This test is not finished and the functionality
+        #              needs to revisited.
         floods = 'Flood_Current_Depth_Jakarta_geographic.asc'
         roads = 'indonesia_highway_sample.shp'
         plugin_name = 'Flood Road Impact Function'
@@ -2306,6 +2418,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    #suite = unittest.makeSuite(Test_Engine, 'test_polygon_to_roads_interpolation_flood_example')
+    suite = unittest.makeSuite(Test_Engine, 'test_line_interpolation_from_polygons_one_poly')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

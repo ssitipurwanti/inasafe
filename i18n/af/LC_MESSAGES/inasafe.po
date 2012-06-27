@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-20 17:50+0700\n"
+"POT-Creation-Date: 2012-06-25 14:33+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,10 +52,12 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:117
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_population_evacuation.py:102
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_population_evacuation.py:102
 msgid "Total"
 msgstr ""
 
@@ -740,6 +742,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:78
 #: impact_functions/inundation/flood_population_evacuation.py:86
 #: impact_functions/inundation/flood_population_evacuation.py:87
+#: impact_functions/inundation/flood_population_evacuation.py:104
+#: impact_functions/inundation/flood_population_evacuation.py:104
 msgid "Rice [kg]"
 msgstr ""
 
@@ -747,6 +751,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:79
 #: impact_functions/inundation/flood_population_evacuation.py:87
 #: impact_functions/inundation/flood_population_evacuation.py:88
+#: impact_functions/inundation/flood_population_evacuation.py:105
+#: impact_functions/inundation/flood_population_evacuation.py:105
 msgid "Drinking Water [l]"
 msgstr ""
 
@@ -754,6 +760,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:80
 #: impact_functions/inundation/flood_population_evacuation.py:88
 #: impact_functions/inundation/flood_population_evacuation.py:89
+#: impact_functions/inundation/flood_population_evacuation.py:106
+#: impact_functions/inundation/flood_population_evacuation.py:106
 msgid "Clean Water [l]"
 msgstr ""
 
@@ -761,6 +769,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:81
 #: impact_functions/inundation/flood_population_evacuation.py:89
 #: impact_functions/inundation/flood_population_evacuation.py:90
+#: impact_functions/inundation/flood_population_evacuation.py:107
+#: impact_functions/inundation/flood_population_evacuation.py:107
 msgid "Family Kits"
 msgstr ""
 
@@ -768,6 +778,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:82
 #: impact_functions/inundation/flood_population_evacuation.py:90
 #: impact_functions/inundation/flood_population_evacuation.py:91
+#: impact_functions/inundation/flood_population_evacuation.py:108
+#: impact_functions/inundation/flood_population_evacuation.py:108
 msgid "Toilets"
 msgstr ""
 
@@ -804,6 +816,9 @@ msgstr ""
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:111
 #: impact_functions/inundation/flood_OSM_building_impact.py:171
 #: impact_functions/inundation/flood_population_evacuation.py:111
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
+#: impact_functions/inundation/flood_population_evacuation.py:112
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:224
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: impact_functions/earthquake/padang_building_impact_model.py:132
@@ -841,6 +856,7 @@ msgstr ""
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:120
 #: impact_functions/inundation/flood_population_evacuation.py:120
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:121
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:121
 #: impact_functions/inundation/flood_population_evacuation.py:121
 msgid "People in need of evacuation"
 msgstr ""
@@ -853,6 +869,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:121
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:122
 #: impact_functions/inundation/flood_population_evacuation.py:122
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:122
+#: impact_functions/inundation/flood_population_evacuation.py:122
 msgid "Population Density"
 msgstr ""
 
@@ -862,6 +880,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:109
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:127
 #: impact_functions/inundation/flood_population_evacuation.py:127
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:128
+#: impact_functions/inundation/flood_population_evacuation.py:128
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:128
 #: impact_functions/inundation/flood_population_evacuation.py:128
 #, python-format
@@ -880,6 +900,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:113
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:114
 #: impact_functions/inundation/flood_population_evacuation.py:114
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:114
+#: impact_functions/inundation/flood_population_evacuation.py:114
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps)i m"
 msgstr ""
@@ -888,6 +910,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:76
 #: impact_functions/inundation/flood_population_evacuation.py:84
 #: impact_functions/inundation/flood_population_evacuation.py:85
+#: impact_functions/inundation/flood_population_evacuation.py:102
+#: impact_functions/inundation/flood_population_evacuation.py:102
 msgid "Needs per week"
 msgstr ""
 
@@ -917,13 +941,14 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:112
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:113
 #: impact_functions/inundation/flood_population_evacuation.py:113
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:113
+#: impact_functions/inundation/flood_population_evacuation.py:113
 #, python-format
 msgid "Total population: %i"
 msgstr ""
 
 #: impact_functions/core.py:325 impact_functions/core.py:327
 #: impact_functions/core.py:321 impact_functions/core.py:320
-#: impact_functions/core.py:320
 #, python-format
 msgid "In the event of <i>%s</i> how many <i>%s</i> might <i>%s</i>"
 msgstr ""
@@ -1021,6 +1046,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:218
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:223
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
@@ -1039,6 +1065,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:224
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:229
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:231
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:229
 msgid "Earthquake impact to population"
@@ -1458,6 +1485,8 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:235
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:234
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:258
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:260
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:262
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:260
 msgid "Estimated fatalities"
@@ -1634,6 +1663,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:220
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:227
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
 msgid "Population numbers rounded to nearest 1000."
 msgstr ""
@@ -1649,12 +1679,14 @@ msgid "Suffer because of gender"
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:216
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:216
 #, python-format
 msgid "Are there enough victim identification units available for %i people?"
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #, python-format
 msgid "Are there enough shelters available for %i people?"
@@ -1663,6 +1695,11 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:237
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:241
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:245
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:242
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:247
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:239
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:244
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:249
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:237
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:242
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:247
@@ -1681,6 +1718,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:115
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
 #: impact_functions/inundation/flood_population_evacuation.py:116
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
+#: impact_functions/inundation/flood_population_evacuation.py:116
 #, python-format
 msgid "People in 50cm to 1m of water: %i"
 msgstr ""
@@ -1689,6 +1728,33 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:116
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:117
 #: impact_functions/inundation/flood_population_evacuation.py:117
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:117
+#: impact_functions/inundation/flood_population_evacuation.py:117
 #, python-format
 msgid "People in 30cm to 50cm of water: %i"
+msgstr ""
+
+#: common/dynamic_translations.py:124
+msgid "test"
+msgstr ""
+
+#: storage/interpolation.py:60
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %s to vector layer %s. Error "
+"message: %s"
+msgstr ""
+
+#: impact_functions/core.py:320 impact_functions/core.py:320
+#, python-format
+msgid ""
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
+msgstr ""
+
+#: storage/interpolation.py:60 storage/interpolation.py:60
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %(raster)s to vector layer "
+"%(vector)s. Error message: %(error)s"
 msgstr ""

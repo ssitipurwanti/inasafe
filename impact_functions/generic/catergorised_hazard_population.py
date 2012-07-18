@@ -15,11 +15,11 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
     :rating 2
     :param requires category=='hazard' and \
                     subcategory=='normalised' and \
-                    layertype=='raster' and \
+                    layertype=='raster'
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
-                    layertype=='raster' and \
+                    layertype=='raster'
                     
     """
 
@@ -58,9 +58,9 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Calculate impact as population exposed to each catergor
         P = population.get_data(nan=0.0, scaling=True)
-        H = numpy.where(D == high_t , P, 0)
-        M = numpy.where(D > medium_t, P, 0)
-        L = numpy.where(D > low_t, P, 0)
+        H = numpy.where(C == high_t , P, 0)
+        M = numpy.where(C > medium_t, P, 0)
+        L = numpy.where(C > low_t, P, 0)
 
         # Count totals
         total = int(numpy.sum(P))
@@ -73,18 +73,18 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         if total > 1000:
             total = total // 1000 * 1000
         if high > 1000:
-            evacuated = evacuated // 1000 * 1000
+            high = high // 1000 * 1000
         if medium > 1000:
             medium = medium // 1000 * 1000
         if low > 1000:
             low = low // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+##        rice = evacuated * 2.8
+##        drinking_water = evacuated * 17.5
+##        water = evacuated * 67
+##        family_kits = evacuated / 5
+##        toilets = evacuated / 20
 
         # Generate impact report for the pdf map
         table_body = [question,
@@ -124,8 +124,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         # Generare 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
-        classes = numpy.linspace(numpy.nanmin(I.flat[:]),
-                                 numpy.nanmax(I.flat[:]), 8)
+        classes = numpy.linspace(numpy.nanmin(H.flat[:]),
+                                 numpy.nanmax(H.flat[:]), 8)
 
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
@@ -137,7 +137,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         style_info['legend_title'] = _('Population Density')
 
         # Create raster object and return
-        R = Raster(I,
+        R = Raster(H,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name=_('Population which %s') % get_function_title(self),

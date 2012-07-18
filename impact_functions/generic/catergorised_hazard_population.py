@@ -23,7 +23,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                     
     """
 
-    title = _('Impact by class')
+    title = _('be impacted')
 
     def run(self, layers):
         """Plugin for impact of population as derived by catergorised hazard

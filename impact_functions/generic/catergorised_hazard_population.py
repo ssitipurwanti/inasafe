@@ -91,15 +91,16 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                       TableRow([_('People impacted '),
                                 '%i' % total_impact],
                                header=True),
-                      TableRow(_('Map shows population density in high hazard area '
-                                 'evacuation')),
-                      #,
+                      TableRow([_('People in high hazard area '),
+                                '%i' % high],
+                               header=True),
                       TableRow([_('People in medium hazard area '),
                                 '%i' % medium],
                                header=True),
                       TableRow([_('People in low hazard area'),
                                 '%i' % low],
                                header=True)]
+                      
 ##                    TableRow([_('Needs per week'), _('Total')],
 ##                               header=True),
 ##                      [_('Rice [kg]'), int(rice)],
@@ -111,11 +112,9 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes:'), header=True),
-                           _('Total population: %i') % total,
-                           _('Number of people in '
-                             'High hazard area: %i ') % high,
-                           _('Medium hazard area: %i') % medium,
-                           _('Low hazard area: %i') % low])
+                           _('Map shows population density in high hazard '
+                             'area evacuation'),
+                           _('Total population: %i') % total])
 ##                           _('Minimum needs are defined in BNPB '
 ##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()

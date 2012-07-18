@@ -60,7 +60,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         P = population.get_data(nan=0.0, scaling=True)
         H = numpy.where(C == high_t , P, 0)
         M = numpy.where(C > medium_t, P, 0)
-        L = numpy.where(C > low_t, P, 0)
+        L = numpy.where(C < low_t, P, 0)
 
         # Count totals
         total = int(numpy.sum(P))
@@ -72,6 +72,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         # Don't show digits less than a 1000
         if total > 1000:
             total = total // 1000 * 1000
+        if total_impact > 1000:
+            total_impact = total_impact // 1000 * 1000
         if high > 1000:
             high = high // 1000 * 1000
         if medium > 1000:
@@ -112,8 +114,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes:'), header=True),
-                           _('Map shows population density in high hazard '
-                             'area evacuation'),
+                           _('Map shows population density in high or medium '
+                             'hazard area'),
                            _('Total population: %i') % total])
 ##                           _('Minimum needs are defined in BNPB '
 ##                             'regulation 7/2008')])
@@ -123,8 +125,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         # Generare 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
-        classes = numpy.linspace(numpy.nanmin(H.flat[:]),
-                                 numpy.nanmax(H.flat[:]), 8)
+        classes = numpy.linspace(numpy.nanmin(M.flat[:]),
+                                 numpy.nanmax(M.flat[:]), 8)
 
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
@@ -136,7 +138,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         style_info['legend_title'] = _('Population Density')
 
         # Create raster object and return
-        R = Raster(H,
+        R = Raster(M,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name=_('Population which %s') % get_function_title(self),

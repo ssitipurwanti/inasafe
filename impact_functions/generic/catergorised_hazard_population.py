@@ -14,8 +14,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
     :author AIFDR
     :rating 2
     :param requires category=='hazard' and \
+                    subcategory=='normalised' and \
                     layertype=='raster' and \
-                    unit==== 'normalised'
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
@@ -42,12 +42,12 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # The 3 catergory 
         high_t = 1
-        medium_t = 0.63
-        low_t = 0.33
+        medium_t = 0.66
+        low_t = 0.34
 
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Catergorised Hazard
-            population = get_exposure_layer(layers) # Population Raster
+        population = get_exposure_layer(layers) # Population Raster
 
         question = get_question(inundation.get_name(),
                                 population.get_name(),
@@ -99,14 +99,14 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                                header=True),
                       TableRow([_('People in low hazard area'),
                                 '%i' % low],
-                               header=True)]]
-                    """TableRow([_('Needs per week'), _('Total')],
-                               header=True),
-                      [_('Rice [kg]'), int(rice)],
-                      [_('Drinking Water [l]'), int(drinking_water)],
-                      [_('Clean Water [l]'), int(water)],
-                      [_('Family Kits'), int(family_kits)],
-                      [_('Toilets'), int(toilets)]]"""
+                               header=True)]
+##                    TableRow([_('Needs per week'), _('Total')],
+##                               header=True),
+##                      [_('Rice [kg]'), int(rice)],
+##                      [_('Drinking Water [l]'), int(drinking_water)],
+##                      [_('Clean Water [l]'), int(water)],
+##                      [_('Family Kits'), int(family_kits)],
+##                      [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -116,8 +116,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                              'High hazard area: %i ') % high,
                            _('Medium hazard area: %i') % medium,
                            _('Low hazard area: %i') % low])
-                           """_('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])"""
+##                           _('Minimum needs are defined in BNPB '
+##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in high hazard areas')
 

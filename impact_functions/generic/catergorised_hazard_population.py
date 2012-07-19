@@ -20,7 +20,6 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='population' and \
                     layertype=='raster'
-                    
     """
 
     title = _('be impacted')
@@ -31,7 +30,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         Input
           layers: List of layers expected to contain
               H: Raster layer of catergorised hazard
-              P: Raster layer of population data **note this may not be correct: on the same grid as H
+              P: Raster layer of population data 
 
         Counts number of people exposed to each caterogry of the hazard
 
@@ -40,13 +39,13 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
           Table with number of people in each catergory
         """
 
-        # The 3 catergory 
+        # The 3 catergory
         high_t = 1
         medium_t = 0.66
         low_t = 0.34
 
         # Identify hazard and exposure layers
-        inundation = get_hazard_layer(layers)  # Catergorised Hazard
+        inundation = get_hazard_layer(layers)   # Catergorised Hazard
         population = get_exposure_layer(layers) # Population Raster
 
         question = get_question(inundation.get_name(),
@@ -56,7 +55,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         # Extract data as numeric arrays
         C = inundation.get_data(nan=0.0)  # Catergory
 
-        # Calculate impact as population exposed to each catergor
+        # Calculate impact as population exposed to each catergory
         P = population.get_data(nan=0.0, scaling=True)
         H = numpy.where(C == high_t , P, 0)
         M = numpy.where(C > medium_t, P, 0)
@@ -102,7 +101,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                       TableRow([_('People in low hazard area'),
                                 '%i' % low],
                                header=True)]
-                      
+
 ##                    TableRow([_('Needs per week'), _('Total')],
 ##                               header=True),
 ##                      [_('Rice [kg]'), int(rice)],
